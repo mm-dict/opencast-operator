@@ -1,0 +1,67 @@
+---
+- name: Create the namespace
+  k8s:
+    state: present
+    api_version: v1
+    kind: Namespace
+    name: '{{ meta.namespace }}'
+
+- name: Create the secret for opencast login
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: '{{ meta.name }}-opencast-allinone'
+      data:
+        admin-pass: '{{ opencast.admin.pass | string | b64encode  }}'
+        digest-pass: '{{ opencast.digest.pass | string | b64encode  }}'
+
+- name: Create the secret for the database login
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: '{{ meta.name }}-opencast-allinone-database'
+      data:
+        database-password: '{{ opencast.database.pass | string | b64encode  }}'
+
+- name: Create the secret for activemq login
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: '{{ meta.name }}-opencast-allinone-activemq'
+      data:
+        activemq-password: '{{ opencast.activemq.pass | string | b64encode  }}'
+
+- name: Create the PV when defined in the spec
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: opencast-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '{{ pvsize }}'
+  when: createpv
+
+- name: Include the activemq tasks
+  include: activemq.yml
+
+- name: Include the opencast allinone tasks
+  include: opencastallinone.yml

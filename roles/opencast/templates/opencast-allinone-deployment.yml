@@ -1,0 +1,121 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ meta.name }}-opencast-allinone'
+  namespace: '{{ meta.namespace }}'
+  labels:
+    app: opencast
+    type: allinone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencast
+  template:
+    metadata:
+      labels:
+        app: opencast
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: opencast-allinone
+          image: quay.io/mm-dict/opencast-allinone:8.x
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ORG_OPENCASTPROJECT_DB_VENDOR
+              value: "MySQL"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
+              value: "{{ opencast.database.url }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
+              value: "{{ opencast.database.user }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
+              value: "com.mysql.cj.jdbc.Driver"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-allinone-database'
+                  key: database-password
+            - name: JAVA_MIN_MEM
+              value: "512M"
+            - name: JAVA_MAX_MEM
+              value: "5G"
+            - name: ORG_OPENCASTPROJECT_SERVER_URL
+              value: "{{ opencast.server.url }}"
+            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
+              value: "admin"
+            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-allinone'
+                  key: admin-pass
+            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_USER
+              value: "opencast_system_account"
+            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-allinone'
+                  key: digest-pass
+            - name: ACTIVEMQ_BROKER_URL
+              value: "{{ opencast.activemq.url }}"
+            - name: ACTIVEMQ_BROKER_USERNAME
+              value: "opencast"
+            - name: ACTIVEMQ_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-allinone-activemq'
+                  key: activemq-password
+            - name: KARAF_ETC
+              value: "/opencast/etc"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
+              value: "/paella/ui/watch.html?id=#{id}"
+            - name: ORG_OPENCASTPROJECT_STREAMING_URL
+              value: "rtmp://wowza.dev.opencast.ugent.be/opencastdev"
+            - name: ORG_OPENCASTPROJECT_ADAPTIVE_STREAMING_URL
+              value: "https://wowza.dev.opencast.ugent.be/opencastdev"
+          volumeMounts:
+            - name: opencast-persistent-storage
+              mountPath: /data
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
+              subPath: org.opencastproject.organization-mh_default_org.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
+              subPath: org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
+              subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
+              subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/security/mh_default_org.xml
+              subPath: mh_default_org.xml
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-ugent.cfg
+              subPath: org.opencastproject.userdirectory.ldap-ugent.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
+              subPath: paella-config.json
+            - name: opencast-config
+              mountPath: /opencast/etc/org.apache.karaf.features.cfg
+              subPath: org.apache.karaf.features.cfg
+          resources:
+            requests:
+              memory: "{{ resources.requests.memory }}"
+              cpu: "{{ resources.requests.cpu }}"
+            limits:
+              memory: "{{ resources.limits.memory }}"
+              cpu: "{{ resources.limits.cpu }}"
+      volumes:
+        - name: opencast-config
+          configMap:
+            name: '{{ meta.name }}-opencast-config'
+        - name: opencast-persistent-storage
+          persistentVolumeClaim:
+            claimName: opencast-data

@@ -1,0 +1,27 @@
+---
+- name: Create the service for the allinone deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-allinone'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+      spec:
+        selector:
+          app: opencast
+        ports:
+          - port: 8080
+
+- name: Create the configmap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-allinone-configmap.yml') }}"
+
+- name: Create the deployment for opencast-allinone
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-allinone-deployment.yml') }}"

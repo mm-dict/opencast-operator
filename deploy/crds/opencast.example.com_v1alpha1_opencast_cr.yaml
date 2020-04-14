@@ -1,0 +1,59 @@
+apiVersion: opencast.example.com/v1alpha1
+kind: Opencast
+metadata:
+  name: example-opencast
+spec:
+  # Add fields here
+  createpv: yes
+  pvsize: 20Gi
+  opencast:
+    database:
+      url: jdbc:mysql://localhost/opencast
+      user: opencast
+      pass: opencast
+    digest:
+      pass: CHANGE_ME
+    activemq:
+      url: failover://(tcp://activemq:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+      pass: opencast
+    server:
+      url: https://example.opencast.org
+    lti:
+      highly_trusted_consumer_key: opencast
+    oauth:
+      consumer:
+        name: opencast
+        key: opencast
+        secret: opencast
+    admin:
+      pass: opencast
+      ui:
+        url: https://example.opencast.org
+    engage:
+      ui:
+        url: https://example.opencast.org
+    #LDAP userdirectory
+    userdirectory:
+      ldap:
+        id: example
+        url: ldaps://example.opencast.org:636
+        searchbase: dc=opencast,dc=org
+        searchfilter: (uid={0})
+        roleattributes: objectClass
+        userdn: cn=opencast,ou=applications,dc=opencast,dc=org
+        password: example
+    # CAS login filter
+    cas_filter:
+      login_url:
+      service:
+      ticket_validator:
+      logout_url:
+      logout_filter_url:
+  # Resource constraints for allinone installation
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 1

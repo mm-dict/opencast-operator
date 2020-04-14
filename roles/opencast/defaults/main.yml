@@ -1,0 +1,28 @@
+---
+# defaults file for opencast
+meta:
+  namespace: opencast
+  name: opencast
+createpv: yes
+pvsize: 20Gi
+opencast:
+  database:
+    url: jdbc:mysql://localhost/opencast
+    user: opencast
+    pass: opencast
+  admin:
+    pass: opencast
+  digest:
+    pass: CHANGE_ME
+  activemq:
+    url: failover://(tcp://activemq:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+    pass: opencast
+  server:
+    url: opencast.example.com
+resources:
+  requests:
+    memory: 1Gi
+    cpu: 1
+  limits:
+    memory: 1Gi
+    cpu: 1

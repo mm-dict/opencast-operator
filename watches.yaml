@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: opencast.example.com
+  kind: Opencast
+  playbook: playbook.yml

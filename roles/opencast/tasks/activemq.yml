@@ -1,0 +1,43 @@
+---
+- name: Create the activemq PV
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: activemq
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '50Mi'
+
+- name: Create the activemq service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: activemq
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: activemq
+      spec:
+        selector:
+          app: activemq
+        ports:
+          - port: 61616
+
+- name: Create the configmap for activemq
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/activemq-configmap.yml') }}"
+
+- name: Create the deployment for activemq
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/activemq-deployment.yml') }}"
