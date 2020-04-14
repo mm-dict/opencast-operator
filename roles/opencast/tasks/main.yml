@@ -65,3 +65,20 @@
 
 - name: Include the opencast allinone tasks
   include: opencastallinone.yml
+  when: opencast-allinone is defined
+
+- name: Include the opencast admin tasks
+  include: opencastadmin.yml
+  when: opencast-admin is defined
+
+- name: Include the opencast presentation tasks
+  include: opencastpresentation.yml
+  when: opencast-allinone is defined
+
+- name: Include the opencast worker tasks
+  include: opencastworker.yml
+  when: opencast-worker is defined
+
+- name: Include the opencast ingest tasks
+  include: opencastingest.yml
+  when: opencast-ingest is defined

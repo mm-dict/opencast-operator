@@ -4,8 +4,10 @@ metadata:
   name: example-opencast
 spec:
   # Add fields here
+  # Storage settings
   createpv: yes
   pvsize: 20Gi
+  # General opencast configuration settings
   opencast:
     database:
       url: jdbc:mysql://localhost/opencast
@@ -49,11 +51,48 @@ spec:
       ticket_validator:
       logout_url:
       logout_filter_url:
+  # Type of deploy, options are allinone, admin, presentation, worker, ingest.
+  opencast-allinone:
   # Resource constraints for allinone installation
-  resources:
-    requests:
-      memory: 1Gi
-      cpu: 1
-    limits:
-      memory: 1Gi
-      cpu: 1
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 1
+      limits:
+        memory: 1Gi
+        cpu: 1
+  # opencast-admin:
+    # resources:
+      # requests:
+      #   memory: 1Gi
+      #   cpu: 1
+      # limits:
+      #   memory: 1Gi
+      #   cpu: 1
+  # opencast-presentation:
+    # resources:
+      # requests:
+      #   memory: 1Gi
+      #   cpu: 1
+      # limits:
+      #   memory: 1Gi
+      #   cpu: 1
+  # opencast-worker:
+    # replicas: 1
+    # resources:
+      # requests:
+      #   memory: 1Gi
+      #   cpu: 1
+      # limits:
+      #   memory: 1Gi
+      #   cpu: 1
+  # opencast-ingest:
+    # replicas: 1
+    # resources:
+      # requests:
+      #   memory: 1Gi
+      #   cpu: 1
+      # limits:
+      #   memory: 1Gi
+      #   cpu: 1
+
