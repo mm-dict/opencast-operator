@@ -1,48 +1,41 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: '{{ meta.name }}-opencast-allinone'
+  name: '{{ meta.name }}-opencast-worker'
   namespace: '{{ meta.namespace }}'
   labels:
     app: opencast
-    type: allinone
+    type: worker
 spec:
-  replicas: 1
+  replicas: {{ opencast-worker.replicas }}
+  serviceName: opencast-worker
   selector:
     matchLabels:
       app: opencast
+      type: worker
   template:
     metadata:
       labels:
         app: opencast
+        type: worker
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       containers:
-        - name: opencast-allinone
-          image: '{{ opencast-allinone.image }}'
+        - name: opencast-worker
+          image: '{{ opencast-worker.image }}'
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+              name: web
           env:
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
               value: "MySQL"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
-              value: "{{ opencast.database.url }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
-              value: "{{ opencast.database.user }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
-              value: "com.mysql.cj.jdbc.Driver"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast-database'
-                  key: database-password
             - name: JAVA_MIN_MEM
               value: "512M"
             - name: JAVA_MAX_MEM
-              value: "5G"
+              value: "4G"
             - name: ORG_OPENCASTPROJECT_SERVER_URL
               value: "{{ opencast.server.url }}"
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
@@ -59,31 +52,35 @@ spec:
                 secretKeyRef:
                   name: '{{ meta.name }}-opencast'
                   key: digest-pass
-            - name: ACTIVEMQ_BROKER_URL
-              value: "{{ opencast.activemq.url }}"
-            - name: ACTIVEMQ_BROKER_USERNAME
-              value: "{{ opencast.activemq.username }}"
-            - name: ACTIVEMQ_BROKER_PASSWORD
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
+              value: "{{ opencast.database.url }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
+              value: "{{ opencast.database.user }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
+              value: "com.mysql.cj.jdbc.Driver"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
               valueFrom:
                 secretKeyRef:
-                  name: '{{ meta.name }}-opencast-activemq'
-                  key: activemq-password
-            - name: KARAF_ETC
-              value: "/opencast/etc"
-            - name: LOG_LEVEL
-              value: "INFO"
-            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
-              value: "/paella/ui/watch.html?id=#{id}"
+                  name: '{{ meta.name }}-opencast-allinone-database'
+                  key: database-password
             - name: ORG_OPENCASTPROJECT_STREAMING_URL
               value: {{ opencast.streaming.url }}
             - name: ORG_OPENCASTPROJECT_ADAPTIVE_STREAMING_URL
               value: {{ opencast.adaptive_streaming.url }}
+            - name: ACTIVEMQ_BROKER_URL
+              value: "{{ opencast.activemq.url }}"
+            - name: ACTIVEMQ_BROKER_USERNAME
+              value: "{{ opencast.activemq.user}}"
+            - name: ACTIVEMQ_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-activemq'
+                  key: opencast-password
+            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
+              value: "/paella/ui/watch.html?id=#{id}"
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
-              subPath: org.opencastproject.organization-mh_default_org.cfg
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
               subPath: org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
@@ -91,31 +88,28 @@ spec:
               mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
               subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
             - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-              subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/security/mh_default_org.xml
-              subPath: mh_default_org.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-ugent.cfg
-              subPath: org.opencastproject.userdirectory.ldap-ugent.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
+              mountPath: /opencast/etc/paella/config/config.json
               subPath: paella-config.json
             - name: opencast-config
-              mountPath: /opencast/etc/org.apache.karaf.features.cfg
-              subPath: org.apache.karaf.features.cfg
+              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
+              subPath: org.opencastproject.organization-mh_default_org.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.userdirectory.brightspace-default.cfg
+              subPath: org.opencastproject.userdirectory.brightspace-default.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
+              subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
           resources:
             requests:
-              memory: "{{ opencast-allinone.resources.requests.memory }}"
-              cpu: "{{ opencast-allinone.resources.requests.cpu }}"
+              memory: "{{ opencast-worker.resources.requests.memory }}"
+              cpu: "{{ opencast-worker.resources.requests.cpu }}"
             limits:
-              memory: "{{ opencast-allinone.resources.limits.memory }}"
-              cpu: "{{ opencast-allinone.resources.limits.cpu }}"
+              memory: "{{ opencast-worker.resources.limits.memory }}"
+              cpu: "{{ opencast-worker.resources.limits.cpu }}"
       volumes:
-        - name: opencast-config
-          configMap:
-            name: '{{ meta.name }}-opencast-config'
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
+        - name: opencast-config
+          configMap:
+            name: opencast-config

@@ -14,7 +14,7 @@
       kind: Secret
       metadata:
         namespace: '{{ meta.namespace }}'
-        name: '{{ meta.name }}-opencast-allinone'
+        name: '{{ meta.name }}-opencast'
       data:
         admin-pass: '{{ opencast.admin.pass | string | b64encode  }}'
         digest-pass: '{{ opencast.digest.pass | string | b64encode  }}'
@@ -27,7 +27,7 @@
       kind: Secret
       metadata:
         namespace: '{{ meta.namespace }}'
-        name: '{{ meta.name }}-opencast-allinone-database'
+        name: '{{ meta.name }}-opencast-database'
       data:
         database-password: '{{ opencast.database.pass | string | b64encode  }}'
 
@@ -39,7 +39,7 @@
       kind: Secret
       metadata:
         namespace: '{{ meta.namespace }}'
-        name: '{{ meta.name }}-opencast-allinone-activemq'
+        name: '{{ meta.name }}-opencast-activemq'
       data:
         activemq-password: '{{ opencast.activemq.pass | string | b64encode  }}'
 

@@ -17,6 +17,7 @@ spec:
       pass: CHANGE_ME
     activemq:
       url: failover://(tcp://activemq:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+      username: opencast
       pass: opencast
     server:
       url: https://example.opencast.org
