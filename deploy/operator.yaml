@@ -17,7 +17,7 @@ spec:
       containers:
         - name: opencast-operator
           # Replace this with the built image name
-          image: "REPLACE_IMAGE"
+          image: "quay.io/mm-dict/opencast-operator"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner

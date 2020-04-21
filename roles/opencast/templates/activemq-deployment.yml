@@ -39,7 +39,7 @@ spec:
             - name: ACTIVEMQ_OWNER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: '{{ meta.name }}-opencast-allinone-activemq'
+                  name: '{{ meta.name }}-opencast-activemq'
                   key: activemq-password
           volumeMounts:
             - name: activemq-persistent-storage

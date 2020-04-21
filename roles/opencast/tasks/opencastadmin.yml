@@ -1,0 +1,49 @@
+---
+- name: Create the service for the admin deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-admin'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+          type: admin
+      spec:
+        selector:
+          app: opencast
+          type: admin
+        ports:
+          - port: 8080
+
+- name: Create the PV holding the persistent data for the admin deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: opencast-admin-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '{{ opencast_admin.pvsize }}'
+
+- name: Create the opencast-admin configmap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-admin-configmap.yml') }}"
+
+- name: Debugging the deployment
+  debug:
+    msg: "{{ lookup('template', 'templates/opencast-admin-deployment.yml') }}"
+
+- name: Create the deployment for opencast-admin
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-admin-deployment.yml') }}"

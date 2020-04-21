@@ -1,0 +1,42 @@
+---
+- name: set the solr type as a fact
+  set_fact:
+    type: search
+
+- name: Create the solr-search PV
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: solr-search
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '100Mi'
+
+- name: Create the solr-search service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: solr-search
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: solr-search
+      spec:
+        selector:
+          app: solr-search
+        ports:
+          - port: 8080
+
+- name: Create the deployment for solr-search
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/solr-deployment.yml') }}"

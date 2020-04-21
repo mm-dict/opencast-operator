@@ -19,15 +19,13 @@ spec:
       url: failover://(tcp://activemq:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
       username: opencast
       pass: opencast
-    server:
-      url: https://example.opencast.org
-    lti:
-      highly_trusted_consumer_key: opencast
-    oauth:
-      consumer:
-        name: opencast
-        key: opencast
-        secret: opencast
+    # lti:
+    #   highly_trusted_consumer_key: opencast
+    # oauth:
+    #   consumer:
+    #     name: opencast
+    #     key: opencast
+    #     secret: opencast
     admin:
       pass: opencast
       ui:
@@ -36,25 +34,35 @@ spec:
       ui:
         url: https://example.opencast.org
     #LDAP userdirectory
-    userdirectory:
-      ldap:
-        id: example
-        url: ldaps://example.opencast.org:636
-        searchbase: dc=opencast,dc=org
-        searchfilter: (uid={0})
-        roleattributes: objectClass
-        userdn: cn=opencast,ou=applications,dc=opencast,dc=org
-        password: example
-    # CAS login filter
-    cas_filter:
-      login_url:
-      service:
-      ticket_validator:
-      logout_url:
-      logout_filter_url:
+    # userdirectory:
+    #   ldap:
+    #     id: example
+    #     url: ldaps://example.opencast.org:636
+    #     searchbase: dc=opencast,dc=org
+    #     searchfilter: (uid={0})
+    #     roleattributes: objectClass
+    #     userdn: cn=opencast,ou=applications,dc=opencast,dc=org
+    #     password: example
+    # Matomo tracking
+    # matomo:
+    #   server:
+    #   site_id:
   # Type of deploy, options are allinone, admin, presentation, worker, ingest.
-  opencast-allinone:
+  opencast_allinone:
+    # deploy specific variables
+    server:
+      url: https://example.opencast.org
+    # CAS login filter
+    # cas_filter:
+    #   login_url:
+    #   service:
+    #   ticket_validator:
+    #   logout_url:
+    #   logout_filter_url:
   # Resource constraints for allinone installation
+    java:
+      min_mem: 512M
+      max_mem: 2G
     resources:
       requests:
         memory: 1Gi
@@ -63,6 +71,11 @@ spec:
         memory: 1Gi
         cpu: 1
   # opencast-admin:
+    # server:
+    #   url: https://example.opencast.org
+    # java:
+    #   min_mem: 512M
+    #   max_mem: 2G
     # resources:
       # requests:
       #   memory: 1Gi
@@ -71,6 +84,11 @@ spec:
       #   memory: 1Gi
       #   cpu: 1
   # opencast-presentation:
+    # server:
+    #   url: https://example.opencast.org
+    # java:
+    #   min_mem: 512M
+    #   max_mem: 2G
     # resources:
       # requests:
       #   memory: 1Gi
@@ -80,6 +98,9 @@ spec:
       #   cpu: 1
   # opencast-worker:
     # replicas: 1
+    # java:
+    #   min_mem: 512M
+    #   max_mem: 2G
     # resources:
       # requests:
       #   memory: 1Gi
@@ -89,6 +110,9 @@ spec:
       #   cpu: 1
   # opencast-ingest:
     # replicas: 1
+    # java:
+    #   min_mem: 512M
+    #   max_mem: 2G
     # resources:
       # requests:
       #   memory: 1Gi

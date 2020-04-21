@@ -33,11 +33,11 @@ spec:
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
               value: "MySQL"
             - name: JAVA_MIN_MEM
-              value: "512M"
+              value: "{{ opencast-worker.java.min_mem}}"
             - name: JAVA_MAX_MEM
-              value: "4G"
+              value: "{{ opencast-worker.java.max_mem}}"
             - name: ORG_OPENCASTPROJECT_SERVER_URL
-              value: "{{ opencast.server.url }}"
+              value: ""
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
               value: "admin"
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS

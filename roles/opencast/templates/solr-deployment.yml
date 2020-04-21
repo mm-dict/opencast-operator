@@ -1,0 +1,41 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: '{{ meta.name }}-solr-{{ type }}'
+  namespace: '{{ meta.namespace }}'
+  labels:
+    app: 'solr-{{ type }}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 'solr-{{ type }}'
+  template:
+    metadata:
+      labels:
+        app: 'solr-{{ type }}'
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: solr-search
+          image: 'quay.io/mm-dict/solr-{{ type }}'
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+          volumeMounts:
+            - name: 'solr-{{ type }}'
+              mountPath: /var/lib/solr/data
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: 500m
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+      volumes:
+        - name: 'solr-{{ type }}'
+          persistentVolumeClaim:
+            claimName: 'solr-{{ type }}'

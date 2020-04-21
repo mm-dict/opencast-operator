@@ -1,0 +1,42 @@
+---
+- name: set the solr type as a fact
+  set_fact:
+    type: workflow
+
+- name: Create the solr-workflow PV
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: solr-workflow
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '100Mi'
+
+- name: Create the solr-workflow service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: solr-workflow
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: solr-workflow
+      spec:
+        selector:
+          app: solr-workflow
+        ports:
+          - port: 8080
+
+- name: Create the deployment for solr-workflow
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/solr-deployment.yml') }}"
