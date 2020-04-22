@@ -33,6 +33,7 @@ spec:
     engage:
       ui:
         url: https://example.opencast.org
+
     #LDAP userdirectory
     # userdirectory:
     #   ldap:

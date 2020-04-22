@@ -29,73 +29,18 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: ORG_OPENCASTPROJECT_DB_VENDOR
-              value: "MySQL"
             - name: JAVA_MIN_MEM
               value: "{{ opencast_admin.java.min_mem}}"
             - name: JAVA_MAX_MEM
               value: "{{ opencast_admin.java.max_mem}}"
-            - name: ORG_OPENCASTPROJECT_SERVER_URL
-              value: "{{ opencast_admin.server.url }}"
-            - name: PROP_ORG_OPENCASTPROJECT_ADMIN_UI_URL
-              value: "{{ opencast.admin.ui.url }}"
-            - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
-              value: "{{ opencast.engage.ui.url }}"
-            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
-              value: "admin"
-            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast'
-                  key: admin-pass
-            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_USER
-              value: "opencast_system_account"
-            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast'
-                  key: digest-pass
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
-              value: "{{ opencast.database.url }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
-              value: "{{ opencast.database.user }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
-              value: "com.mysql.cj.jdbc.Driver"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast-database'
-                  key: database-password
-            - name: ACTIVEMQ_BROKER_URL
-              value: "{{ opencast.activemq.url }}"
-            - name: ACTIVEMQ_BROKER_USERNAME
-              value: "{{ opencast.activemq.user }}"
-            - name: ACTIVEMQ_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast-activemq'
-                  key: activemq-password
-            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
-              value: "/paella/ui/watch.html?id=#{id}"
-            - name: SOLR_SEARCH_URL
-              value: "http://solr-search:8080/solr"
-            - name: SOLR_SERIES_URL
-              value: "http://solr-series:8080/solr"
-            - name: SOLR_WORKFLOW_URL
-              value: "http://solr-workflow:8080/solr"
-            - name: ELASTIC_SERVER_ADDRESS
-              value: "opencast-elastic"
-            - name: ELASTIC_SERVER_PORT
-              value: "9300"
-            {% if opencast.streaming.url is defined %}
-            - name: ORG_OPENCASTPROJECT_STREAMING_URL
-              value: {{ opencast.streaming.url }}
-            - name: ORG_OPENCASTPROJECT_ADAPTIVE_STREAMING_URL
-              value: {{ opencast.adaptive_streaming.url }}
-            {% endif %}
+            - name: OPENCAST_DISABLE_CONFIG
+              value: "true"
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
+            - name: opencast-admin-config
+              mountPath: /opencast/etc/custom.properties
+              subPath: custom.properties
             - name: opencast-config
               mountPath: /opencast/etc/paella/config/config.json
               subPath: paella-config.json

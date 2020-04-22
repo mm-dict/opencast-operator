@@ -21,7 +21,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: solr-search
-          image: 'quay.io/mm-dict/solr-{{ type }}'
+          image: 'quay.io/mm-dict/opencast-solr-{{ type }}'
           imagePullPolicy: Always
           ports:
           - containerPort: 8080
