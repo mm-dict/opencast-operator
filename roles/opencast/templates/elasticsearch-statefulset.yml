@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: '{{ meta.name }}-opencast-elasticsearch'
+  namespace: '{{ meta.namespace }}'
+  labels:
+    app: opencast
+    type: elasticsearch
+spec:
+  replicas: 1
+  serviceName: '{{ meta.name }}-opencast-elasticsearch'
+  selector:
+    matchLabels:
+      app: opencast
+      type: elasticsearch
+  minReadySeconds: 60
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: opencast
+        type: elasticsearch
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: opencast-elastic
+          image: docker.elastic.co/elasticsearch/elasticsearch:5.6.15
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 9200
+            name: rest
+            protocol: TCP
+          - containerPort: 9300
+            name: inter-node
+            protocol: TCP
+          env:
+            - name: cluster.name
+              value: "opencast"
+            - name: node.name
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: discovery.type
+              value: "single-node"
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+            - name: xpack.security.enabled
+              value: "false"
+            - name: xpack.monitoring.enabled
+              value: "false"
+          volumeMounts:
+            - name: elasticsearch-persistent-storage
+              mountPath: /usr/share/elasticsearch/data
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: 500m
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+      initContainers:
+        - name: increase-vm-max-map
+          image: busybox
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+        - name: increase-fd-ulimit
+          image: busybox
+          command: ["sh", "-c", "ulimit -n 65536"]
+          securityContext:
+            privileged: true
+      volumes:
+        - name: elasticsearch-persistent-storage
+          persistentVolumeClaim:
+            claimName: '{{ meta.name }}-elasticsearch-data'

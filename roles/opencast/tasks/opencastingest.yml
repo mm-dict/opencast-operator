@@ -1,0 +1,29 @@
+---
+- name: set the opencast type as a fact
+  set_fact:
+    TYPE: opencast-ingest
+
+- name: Create the service for the ingest statefulset
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-ingest'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+          type: ingest
+      spec:
+        selector:
+          app: opencast
+          type: ingest
+        clusterIP: None
+        ports:
+          - port: 8080
+
+- name: Create the statefulset for opencast-ingest
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-ingest-statefulset.yml') }}"

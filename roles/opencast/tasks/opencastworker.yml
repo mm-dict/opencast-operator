@@ -1,0 +1,33 @@
+---
+- name: set the opencast type as a fact
+  set_fact:
+    TYPE: opencast-worker
+
+- name: set the server_url as a fact
+  set_fact:
+    SERVER_URL: "{{ opencast_presentation.server.url }}"
+
+- name: Create the service for the worker statefulset
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-worker'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+          type: worker
+      spec:
+        selector:
+          app: opencast
+          type: worker
+        clusterIP: None
+        ports:
+          - port: 8080
+
+- name: Create the statefulset for opencast-worker
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-worker-statefulset.yml') }}"

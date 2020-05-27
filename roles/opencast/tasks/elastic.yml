@@ -1,0 +1,44 @@
+---
+- name: Create the elastic PV
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: '{{ meta.name }}-elasticsearch-data'
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '1Gi'
+
+- name: Create the elastic service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-elasticsearch'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+          type: elasticsearch
+      spec:
+        selector:
+          app: opencast
+          type: elasticsearch
+        ports:
+          - name: rest
+            port: 9200
+          - name: inter-node
+            port: 9300
+
+
+- name: Create the statefulset for elasticsearch
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/elasticsearch-statefulset.yml') }}"

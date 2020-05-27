@@ -8,8 +8,8 @@ metadata:
     app: opencast
     type: ingest
 spec:
-  replicas: 1
-  serviceName: opencast-ingest
+  replicas: {{ opencast_worker.replicas | default(1) }}
+  serviceName: '{{ meta.name }}-opencast-ingest'
   selector:
     matchLabels:
       app: opencast
@@ -25,19 +25,22 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      serviceAccountName: opencast
       containers:
         - name: opencast-ingest
-          image: '{{ opencast-admin.image }}'
+          image: '{{ opencast_ingest.image }}'
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
+            - name: ORG_OPENCASTPROJECT_SERVER_URL
+              value: "{{ opencast_ingest.server.url}}"
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
               value: "MySQL"
             - name: JAVA_MIN_MEM
-              value: "{{ opencast-ingest.java.min_mem}}"
+              value: "{{ opencast_ingest.java.min_mem}}"
             - name: JAVA_MAX_MEM
-              value: "{{ opencast-ingest.java.max_mem}}"
+              value: "{{ opencast_ingest.java.max_mem}}"
             - name: ORG_OPENCASTPROJECT_SERVER_URL
               value: ""
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
@@ -77,55 +80,47 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: '{{ meta.name }}-opencast-activemq'
-                  key: opencast-password
+                  key: activemq-password
             - name: PROP_ORG_OPENCASTPROJECT_PLAYER
               value: "/paella/ui/watch.html?id=#{id}"
+            - name: PROP_ORG_OPENCASTPROJECT_ADMIN_UI_URL
+              value: "{{ opencast.admin.ui.url }}"
+            - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
+              value: "{{ opencast.engage.ui.url }}"
+            - name: SOLR_SEARCH_URL
+              value: "{{ opencast.solr_search.url }}"
+            - name: SOLR_SERIES_URL
+              value: "{{ opencast.solr_series.url }}"
+            - name: SOLR_WORKFLOW_URL
+              value: "{{ opencast.solr_workflow.url }}"
+            - name: ELASTIC_SERVER_ADDRESS
+              value: "{{ opencast.elasticsearch.address }}"
+            - name: ELASTIC_SERVER_PORT
+              value: "9200"
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
-            - name: opencast-persistent-storage
-              mountPath: /solr-data/
-              subPath: opencast/solr-data
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
-              subPath: org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-              subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/paella/config/config.json
-              subPath: paella-config.json
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
-              subPath: org.opencastproject.organization-mh_default_org.cfg
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/security/mh_default_org.xml
-              subPath: mh_default_org.xml
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/org.apache.karaf.features.cfg
-              subPath: org.apache.karaf.features.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-              subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-              subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-ugent.cfg
-              subPath: org.opencastproject.userdirectory.ldap-ugent.cfg
-            - name: opencast-admin-data
+            - name: opencast-ingest-data
               mountPath: /opencast/data
+            - name: opencast-config
+              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
+              subPath: ugent-schedule-and-upload.xml
+            - name: opencast-config
+              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
+              subPath: ugent-partial-publish.xml
           resources:
             requests:
-              memory: "{{ opencast-ingest.resources.requests.memory }}"
-              cpu: "{{ opencast-ingest.resources.requests.cpu }}"
+              memory: "{{ opencast_ingest.resources.requests.memory }}"
+              cpu: "{{ opencast_ingest.resources.requests.cpu }}"
             limits:
-              memory: "{{ opencast-ingest.resources.limits.memory }}"
-              cpu: "{{ opencast-ingest.resources.limits.cpu }}"
+              memory: "{{ opencast_ingest.resources.limits.memory }}"
+              cpu: "{{ opencast_ingest.resources.limits.cpu }}"
       volumes:
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
+        - name: opencast-ingest-data
+          emptyDir: {}
         - name: opencast-config
           configMap:
-            name: opencast-config
+            name: {{ meta.name }}-opencast-config

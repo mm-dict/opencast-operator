@@ -6,6 +6,14 @@
     kind: Namespace
     name: '{{ meta.namespace }}'
 
+- name: Create the serviceaccount
+  k8s:
+    state: present
+    api_version: v1
+    kind: ServiceAccount
+    name: opencast
+    namespace: '{{ meta.namespace }}'
+
 - name: Create the secret for opencast login
   k8s:
     state: present
@@ -79,6 +87,10 @@
 - name: Include the solr-workflow tasks
   include: solr-workflow.yml
   when: opencast.solr_workflow is defined
+
+- name: Include the elastic tasks
+  include: elastic.yml
+  when: opencast.elasticsearch is defined
 
 - name: Include the opencast allinone tasks
   include: opencastallinone.yml

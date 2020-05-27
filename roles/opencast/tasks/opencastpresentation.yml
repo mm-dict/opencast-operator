@@ -1,0 +1,53 @@
+---
+- name: set the opencast type as a fact
+  set_fact:
+    TYPE: opencast-presentation
+
+- name: set the server_url as a fact
+  set_fact:
+    SERVER_URL: "{{ opencast_presentation.server.url }}"
+
+- name: Create the service for the presentation deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: '{{ meta.name }}-opencast-presentation'
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: opencast
+          type: presentation
+      spec:
+        selector:
+          app: opencast
+          type: presentation
+        ports:
+          - port: 8080
+
+- name: Create the PV holding the persistent data for the presentation deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: opencast-presentation-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '{{ opencast_presentation.pvsize }}'
+
+- name: Create the opencast-presentation configmap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-presentation-configmap.yml') }}"
+
+- name: Create the deployment for opencast-presentation
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-presentation-deployment.yml') }}"

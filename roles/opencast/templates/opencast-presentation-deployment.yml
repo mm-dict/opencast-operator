@@ -1,6 +1,7 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
 ---
 apiVersion: v1
-kind: DeploymentConfig
+kind: Deployment
 metadata:
   name: '{{ meta.name }}-opencast-presentation'
   namespace: '{{ meta.namespace }}'
@@ -21,67 +22,41 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      serviceAccountName: opencast
       containers:
         - name: opencast-presentation
-          image: '{{ opencast-presentation.image }}'
+          image: '{{ opencast_presentation.image }}'
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
-            - name: ORG_OPENCASTPROJECT_DB_VENDOR
-              value: "MySQL"
             - name: JAVA_MIN_MEM
-              value: "{{ opencast-presentation.java.min_mem}}"
+              value: "{{ opencast_presentation.java.min_mem}}"
             - name: JAVA_MAX_MEM
-              value: "{{ opencast-presentation.java.max_mem}}"
-            - name: ORG_OPENCASTPROJECT_SERVER_URL
-              value: "{{ opencast-presentation.server.url }}"
-            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
-              value: "admin"
-            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast'
-                  key: admin-pass
-            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_USER
-              value: "opencast_system_account"
-            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast'
-                  key: digest-pass
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
-              value: "{{ opencast.database.url }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
-              value: "{{ opencast.database.user }}"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
-              value: "com.mysql.cj.jdbc.Driver"
-            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast-database'
-                  key: database-password
-            - name: ORG_OPENCASTPROJECT_STREAMING_URL
-              value: {{ opencast.streaming.url }}
-            - name: ORG_OPENCASTPROJECT_ADAPTIVE_STREAMING_URL
-              value: {{ opencast.adaptive_streaming.url }}
-            - name: ACTIVEMQ_BROKER_URL
-              value: "{{ opencast.activemq.url }}"
-            - name: ACTIVEMQ_BROKER_USERNAME
-              value: "{{ opencast.activemq.user}}"
-            - name: ACTIVEMQ_BROKER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: '{{ meta.name }}-opencast-activemq'
-                  key: opencast-password
-            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
-              value: "/paella/ui/watch.html?id=#{id}"
+              value: "{{ opencast_presentation.java.max_mem}}"
+            - name: OPENCAST_DISABLE_CONFIG
+              value: "true"
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
-            - name: opencast-persistent-storage
-              mountPath: /solr-data/
-              subPath: opencast/solr-data
+            - name: opencast-config
+              mountPath: /opencast/etc/paella/config/config.json
+              subPath: paella-config.json
+            - name: opencast-config
+              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
+              subPath: org.opencastproject.organization-mh_default_org.cfg
+            - name: opencast-presentation-config
+              mountPath: /opencast/etc/custom.properties
+              subPath: custom.properties
+            - name: opencast-presentation-data
+              mountPath: /opencast/data
+            - name: opencast-config
+              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
+              subPath: ugent-schedule-and-upload.xml
+            - name: opencast-config
+              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
+              subPath: ugent-partial-publish.xml
+            {% if opencast.lti is defined %}
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
               subPath: org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
@@ -89,35 +64,29 @@ spec:
               mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
               subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
             - name: opencast-config
-              mountPath: /opencast/etc/paella/config/config.json
-              subPath: paella-config.json
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
-              subPath: org.opencastproject.organization-mh_default_org.cfg
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/security/mh_default_org.xml
-              subPath: mh_default_org.xml
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/org.apache.karaf.features.cfg
-              subPath: org.apache.karaf.features.cfg
-            - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
               subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-              subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
+            {% endif %}
+            {% if opencast_presentation.cas_filter is defined %}
+            - name: opencast-presentation-config
+              mountPath: /opencast/etc/security/mh_default_org.xml
+              subPath: mh_default_org.xml
+            - name: opencast-presentation-config
+              mountPath: /opencast/etc/org.apache.karaf.features.cfg
+              subPath: org.apache.karaf.features.cfg
+            {% endif %}
+            {% if opencast.userdirectory.ldap is defined %}
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-ugent.cfg
               subPath: org.opencastproject.userdirectory.ldap-ugent.cfg
-            - name: opencast-admin-data
-              mountPath: /opencast/data
+            {% endif %}
           resources:
             requests:
-              memory: "{{ opencast-presentation.resources.requests.memory }}"
-              cpu: "{{ opencast-presentation.resources.requests.cpu }}"
+              memory: "{{ opencast_presentation.resources.requests.memory }}"
+              cpu: "{{ opencast_presentation.resources.requests.cpu }}"
             limits:
-              memory: "{{ opencast-presentation.resources.limits.memory }}"
-              cpu: "{{ opencast-presentation.resources.limits.cpu }}"
+              memory: "{{ opencast_presentation.resources.limits.memory }}"
+              cpu: "{{ opencast_presentation.resources.limits.cpu }}"
           readinessProbe:
             initialDelaySeconds: 60
             periodSeconds: 120
@@ -141,13 +110,12 @@ spec:
       volumes:
         - name: opencast-presentation-config
           configMap:
-            name: opencast-presentation-config
+            name: {{ meta.name }}-opencast-presentation-config
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
         - name: opencast-config
           configMap:
-            name: opencast-config
+            name: {{ meta.name }}-opencast-config
         - name: opencast-presentation-data
-          persistentVolumeClaim:
-            claimName: opencast-presentation-data
+          emptyDir: {}
