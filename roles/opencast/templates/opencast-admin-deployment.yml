@@ -107,8 +107,14 @@ spec:
         - name: opencast-admin-config
           configMap:
             name: {{ meta.name }}-opencast-admin-config
+        {% if createpv is defined %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
+        {% else %}
+        - name: opencast-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ claimName }}
+        {% endif %}
         - name: opencast-admin-data
           emptyDir: {}

@@ -114,9 +114,15 @@ spec:
               memory: "{{ opencast_worker.resources.requests.memory }}"
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
       volumes:
+        {% if createpv is defined %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
+        {% else %}
+        - name: opencast-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ claimName }}
+        {% endif %}
         - name: opencast-worker-data
           emptyDir: {}
         - name: opencast-config

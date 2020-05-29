@@ -5,8 +5,10 @@ metadata:
 spec:
   # Add fields here
   # Storage settings
+  # Either have the operator create a pv or provide the pvc name via the claimName setting
   createpv: yes
   pvsize: 20Gi
+  # claimName: opencast
   # General opencast configuration settings
   opencast:
     database:

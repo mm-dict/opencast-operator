@@ -111,9 +111,15 @@ spec:
         - name: opencast-presentation-config
           configMap:
             name: {{ meta.name }}-opencast-presentation-config
+        {% if createpv is defined %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data
+        {% else %}
+        - name: opencast-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ claimName }}
+        {% endif %}
         - name: opencast-config
           configMap:
             name: {{ meta.name }}-opencast-config
