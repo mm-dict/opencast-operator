@@ -8,7 +8,7 @@ spec:
   # Either have the operator create a pv or provide the pvc name via the claimName setting
   createpv: yes
   pvsize: 20Gi
-  # claimName: opencast
+  # claimname: opencast
   # General opencast configuration settings
   opencast:
     database:

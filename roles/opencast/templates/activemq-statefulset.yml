@@ -1,6 +1,6 @@
 ---
-apiVersion: v1
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: activemq
   namespace: '{{ meta.namespace }}'
@@ -8,16 +8,21 @@ metadata:
     name: activemq
     app: activemq
 spec:
-  replicas: 1
+  replicas: 3
+  serviceName: '{{ meta.name }}-activemq'
   selector:
     matchLabels:
       app: activemq
+  minReadySeconds: 60
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: activemq
     spec:
       restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       containers:
         - name: activemq
           image: quay.io/mm-dict/activemq-opencast:latest
@@ -49,15 +54,20 @@ spec:
               subPath: activemq.xml
           resources:
             requests:
-              memory: 1Gi
-              cpu: 800m
+              memory: 512Mi
+              cpu: 500m
             limits:
               memory: 2Gi
-              cpu: 2
+              cpu: 1
       volumes:
         - name: activemq-config
           configMap:
             name: activemq-config
-        - name: activemq-persistent-storage
-          persistentVolumeClaim:
-            claimName: activemq
+  volumeClaimTemplates:
+  - metadata:
+      name: activemq-persistent-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 50Mi

@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -123,7 +124,7 @@ spec:
         {% else %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
-            claimName: {{ claimName }}
+            claimName: {{ claimname }}
         {% endif %}
         - name: opencast-ingest-data
           emptyDir: {}
