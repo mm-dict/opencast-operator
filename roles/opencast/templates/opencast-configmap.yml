@@ -14,7 +14,7 @@ data:
     workflow-configuration={"flagForCutting":"false","flagForReview":"false","publishToEngage":"true","publishToHarvesting":"true","straightToPublishing":"true"}
     # After deletion, events are retracted with this workflow
     retract-workflow-id=retract
-  org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg: |
+  org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg: |
     # OAuth consumer keys with should be highly trusted.
     #
     # By default OAuth consumer are regarded as untrusted and a user authenticating via such
@@ -28,7 +28,7 @@ data:
     # Multiple consumer keys can be configured, by incrementing the counter. The list is read
     # sequentially incrementing the counter. If you miss any numbers it will stop looking for
     # further consumer keys.
-    lti.oauth.highly_trusted_consumer_key.1='{{ opencast.lti.highly_trusted_consumer_key }}'
+    lti.oauth.highly_trusted_consumer_key.1={{ opencast.lti.highly_trusted_consumer_key }}
 
     # Allow the Opencast system administrator user to authenticate as such via LTI.
     #
@@ -71,9 +71,9 @@ data:
     # Multiple OAuth consumers can be configured, by incrementing the counter. The list is read
     # sequentially incrementing the counter. If you miss any numbers it will stop looking for
     # further consumers.
-    oauth.consumer.name.1='{{ opencast.oauth.consumer.name }}'
-    oauth.consumer.key.1='{{ opencast.oauth.consumer.key }}'
-    oauth.consumer.secret.1='{{ opencast.oauth.consumer.secret }}'
+    oauth.consumer.name.1={{ opencast.oauth.consumer.name }}
+    oauth.consumer.key.1={{ opencast.oauth.consumer.key }}
+    oauth.consumer.secret.1={{ opencast.oauth.consumer.secret }}
   {% endif %}
   org.opencastproject.organization-mh_default_org.cfg: |
     # Organization (tenant) definition.
