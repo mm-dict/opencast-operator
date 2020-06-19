@@ -39,6 +39,9 @@ spec:
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
+              {% if storage.subpath is defined %}
+              subPath: {{ storage.subpath }}
+              {% endif %}
             - name: opencast-config
               mountPath: /opencast/etc/paella/config/config.json
               subPath: paella-config.json

@@ -39,6 +39,9 @@ spec:
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
+              {% if storage.subpath is defined %}
+              subPath: {{ storage.subpath }}
+              {% endif %}
             - name: opencast-admin-config
               mountPath: /opencast/etc/custom.properties
               subPath: custom.properties
@@ -114,7 +117,7 @@ spec:
         {% else %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
-            claimName: {{ claimname }}
+            claimName: {{ storage.claimname }}
         {% endif %}
         - name: opencast-admin-data
           emptyDir: {}

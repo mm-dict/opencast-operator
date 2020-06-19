@@ -102,6 +102,9 @@ spec:
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data
+              {% if storage.subpath is defined %}
+              subPath: {{ storage.subpath }}
+              {% endif %}
             - name: opencast-worker-data
               mountPath: /opencast/data
             - name: opencast-config
