@@ -918,8 +918,8 @@ data:
         }
       }
     }
-  {% if opencast.userdirectory.ldap is defined %}
-  'org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg': |
+  {% for ldap in opencast.userdirectory.ldap  %}
+  'org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg': |
     #########
     ## Required configuration properties
     ######
@@ -928,25 +928,25 @@ data:
     ## May be different as the <ID> used above, but this is not recommended for clarity
     ## IMPORTANT: This identifier must be the same as the one used in the security.xml
     ## file to get a reference to an 'authoritiesPopulator'
-    org.opencastproject.userdirectory.ldap.id={{ opencast.userdirectory.ldap.id }}
+    org.opencastproject.userdirectory.ldap.id={{ ldap.id }}
 
     ## The URL to the LDAP server
     ## Example: ldap://ldap.berkeley.edu
-    org.opencastproject.userdirectory.ldap.url={{ opencast.userdirectory.ldap.url }}
+    org.opencastproject.userdirectory.ldap.url={{ ldap.url }}
 
     ## The base path within LDAP to search for users
     ## Example: ou=people,dc=berkeley,dc=edu
-    org.opencastproject.userdirectory.ldap.searchbase={{ opencast.userdirectory.ldap.searchbase }}
+    org.opencastproject.userdirectory.ldap.searchbase={{ ldap.searchbase }}
 
     ## The search filter to use for identifying users by ID
     ## Example: (uid={0})
-    org.opencastproject.userdirectory.ldap.searchfilter={{ opencast.userdirectory.ldap.searchfilter }}
+    org.opencastproject.userdirectory.ldap.searchfilter={{ ldap.searchfilter }}
 
     ## The comma-separated list of attributes that will be translated into roles.
     ## Note that the attributes may be converted to uppercase and prefixed depending on the configuration below.
     ## Please refer to the documentation of the "roleprefix" property.
     ## Example: berkeleyEduAffiliations,departmentNumber
-    org.opencastproject.userdirectory.ldap.roleattributes={{ opencast.userdirectory.ldap.roleattributes}}
+    org.opencastproject.userdirectory.ldap.roleattributes={{ ldap.roleattributes}}
 
 
     #########
@@ -955,8 +955,8 @@ data:
 
     ## The user and password used for LDAP authentication.
     ## If left commented, the LDAP provider will use an anonymous bind.
-    org.opencastproject.userdirectory.ldap.userDn={{ opencast.userdirectory.ldap.userdn }}
-    org.opencastproject.userdirectory.ldap.password={{ opencast.userdirectory.ldap.password }}
+    org.opencastproject.userdirectory.ldap.userDn={{ ldap.userdn }}
+    org.opencastproject.userdirectory.ldap.password={{ ldap.password }}
 
     ## The maximum number of users to cache
     ## Default: 1000
@@ -992,8 +992,10 @@ data:
     ## The roles in this list are converted to uppercase if the corresponding parameter is set. However, the 'roleprefix'
     ## setting does not affect them -i.e. they will not be further modified even if 'roleprefix' is set.
     ## Defaut: <empty>
-    #org.opencastproject.userdirectory.ldap.extra.roles=
-  {% endif %}
+    {% if ldap.extraroles is defined %}
+    org.opencastproject.userdirectory.ldap.extra.roles={{ ldap.extraroles }}
+    {% endif %}
+  {% endfor %}
   org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg: |
     # Configures the formats that are distributed to the Wowza streaming service.
     # Possible options are: rtmp, hls, hds, smooth, dash
