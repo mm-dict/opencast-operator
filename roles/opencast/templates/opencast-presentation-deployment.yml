@@ -78,7 +78,7 @@ spec:
               mountPath: /opencast/etc/org.apache.karaf.features.cfg
               subPath: org.apache.karaf.features.cfg
             {% endif %}
-            {% for ldap in opencast.userdirectory.ldap %}
+            {% for ldap in _opencast_example_com_opencast.opencast.userdirectory.ldap %}
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg
               subPath: org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg

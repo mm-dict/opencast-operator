@@ -918,7 +918,7 @@ data:
         }
       }
     }
-  {% for ldap in opencast.userdirectory.ldap  %}
+  {% for ldap in _opencast_example_com_opencast.opencast.userdirectory.ldap  %}
   'org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg': |
     #########
     ## Required configuration properties
