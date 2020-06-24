@@ -113,6 +113,11 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
               subPath: ugent-partial-publish.xml
+            {% for volume in custom_volumes %}
+            - name: {{ volume.name }}
+              mountPath: {{ volume.configmap.mountpath }}
+              subPath: {{ volume.configmap.subpath }}
+            {% endfor %}
           resources:
             requests:
               memory: "{{ opencast_worker.resources.requests.memory }}"
@@ -132,3 +137,8 @@ spec:
         - name: opencast-config
           configMap:
             name: {{ meta.name }}-opencast-config
+        {% for volume in custom_volumes %}
+        - name: {{ volume.name }}
+          configMap:
+            name: {{ volume.configmap.name }}
+        {% endfor %}

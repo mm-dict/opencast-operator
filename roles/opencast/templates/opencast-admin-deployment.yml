@@ -81,11 +81,16 @@ spec:
               mountPath: /opencast/etc/org.apache.karaf.features.cfg
               subPath: org.apache.karaf.features.cfg
             {% endif %}
-            {% for ldap in _opencast_example_com_opencast.opencast.userdirectory.ldap %}
+            {% if opencast.userdirectory.ldap is defined %}
             - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg
-              subPath: org.opencastproject.userdirectory.ldap-{{ ldap.id }}.cfg
+              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
+              subPath: org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
             {% endif %}
+            {% for volume in custom_volumes %}
+            - name: {{ volume.name }}
+              mountPath: {{ volume.configmap.mountpath }}
+              subPath: {{ volume.configmap.subpath }}
+            {% endfor %}
           resources:
             requests:
               memory: "{{ opencast_admin.resources.requests.memory }}"
@@ -119,5 +124,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ storage.claimname }}
         {% endif %}
+        {% for volume in custom_volumes %}
+        - name: {{ volume.name }}
+          configMap:
+            name: {{ volume.configmap.name }}
+        {% endfor %}
         - name: opencast-admin-data
           emptyDir: {}
