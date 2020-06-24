@@ -80,11 +80,11 @@ spec:
               mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
               subPath: org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
             {% endif %}
-            {% for volume in custom_volumes %}
-            - name: {{ volume.name }}
-              mountPath: {{ volume.configmap.mountpath }}
-              subPath: {{ volume.configmap.subpath }}
-            {% endfor %}
+            {% if extra_ldap is defined %}
+            - name: {{ extra_ldap.name }}
+              mountPath: {{ extra_ldap.configmap.mountpath }}
+              subPath: {{ extra_ldap.configmap.subpath }}
+            {% endif %}
           resources:
             requests:
               memory: "{{ opencast_presentation.resources.requests.memory }}"
@@ -130,8 +130,8 @@ spec:
             name: {{ meta.name }}-opencast-config
         - name: opencast-presentation-data
           emptyDir: {}
-        {% for volume in custom_volumes %}
-        - name: {{ volume.name }}
+        {% if extra_ldap is defined %}
+        - name: {{ extra_ldap.name }}
           configMap:
-            name: {{ volume.configmap.name }}
-        {% endfor %}
+            name: {{ extra_ldap.configmap.name }}
+        {% endif %}
