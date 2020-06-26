@@ -92,12 +92,16 @@ spec:
               subPath: {{ extra_ldap.configmap.subpath }}
             {% endif %}
           resources:
+            {% if opencast_admin.resources.requests is defined %}
             requests:
               memory: "{{ opencast_admin.resources.requests.memory }}"
               cpu: "{{ opencast_admin.resources.requests.cpu }}"
+            {% endif %}
+            {% if opencast_admin.resources.limits is defined %}
             limits:
               memory: "{{ opencast_admin.resources.limits.memory }}"
               cpu: "{{ opencast_admin.resources.limits.cpu }}"
+            {% endif %}
           readinessProbe:
             initialDelaySeconds: 60
             periodSeconds: 120
@@ -127,7 +131,7 @@ spec:
         {% if extra_ldap is defined %}
         - name: {{ extra_ldap.name }}
           configMap:
-            name: {{ extra_ldap.configmap.name }}
+            name: {{ extra_ldap.name }}
         {% endif %}
         - name: opencast-admin-data
           emptyDir: {}

@@ -119,9 +119,11 @@ spec:
               subPath: {{ extra_ldap.configmap.subpath }}
             {% endif %}
           resources:
+            {% if opencast_worker.resources.requests is defined %}
             requests:
               memory: "{{ opencast_worker.resources.requests.memory }}"
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
+            {% endif %}
       volumes:
         {% if createpv is defined %}
         - name: opencast-persistent-storage
@@ -140,5 +142,5 @@ spec:
         {% if extra_ldap is defined %}
         - name: {{ extra_ldap.name }}
           configMap:
-            name: {{ extra_ldap.configmap.name }}
+            name: {{ extra_ldap.name }}
         {% endif %}

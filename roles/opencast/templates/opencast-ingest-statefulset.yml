@@ -113,12 +113,16 @@ spec:
               mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
               subPath: ugent-partial-publish.xml
           resources:
+            {% if opencast_ingest.resources.requests is defined %}
             requests:
               memory: "{{ opencast_ingest.resources.requests.memory }}"
               cpu: "{{ opencast_ingest.resources.requests.cpu }}"
+            {% endif %}
+            {% if opencast_ingest.resources.limits is defined %}
             limits:
               memory: "{{ opencast_ingest.resources.limits.memory }}"
               cpu: "{{ opencast_ingest.resources.limits.cpu }}"
+            {% endif %}
       volumes:
         {% if createpv is defined %}
         - name: opencast-persistent-storage
