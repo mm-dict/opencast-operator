@@ -70,8 +70,8 @@ spec:
               mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
               subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
             - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-              subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
+              mountPath: /opencast/etc/org.opencastproject.lti.service.impl.LtiServiceImpl.cfg
+              subPath: org.opencastproject.lti.service.impl.LtiServiceImpl.cfg
             {% endif %}
             {% if opencast_admin.cas_filter is defined %}
             - name: opencast-admin-config
