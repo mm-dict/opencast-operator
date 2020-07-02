@@ -914,7 +914,8 @@ data:
       <sec:authentication-manager alias="authenticationManager">
         <sec:authentication-provider ref="casAuthenticationProvider" />
         <sec:authentication-provider user-service-ref="userDetailsService">
-          <sec:password-encoder hash="md5">
+          <sec:password-encoder ref="passwordEncoder">
+            <!-- This salt is used only for decoding legacy MD5 hased passwords -->
             <sec:salt-source user-property="username" />
           </sec:password-encoder>
         </sec:authentication-provider>
