@@ -9,11 +9,11 @@ data:
   {% if opencast.lti is defined %}
   org.opencastproject.lti.service.impl.LtiServiceImpl.cfg: |
     # Which workflow to use when uploading videos
-    workflow=schedule-and-upload
+    workflow={{ opencast.lti.workflow | default('fast') }}
     # Configuration for the workflow
-    workflow-configuration={"flagForCutting":"false","flagForReview":"false","publishToEngage":"true","publishToHarvesting":"true","straightToPublishing":"true"}
+    workflow-configuration={{ opencast.lti.workflowconfiguration | default('{"flagForCutting":"false","flagForReview":"false","publishToEngage":"true","publishToHarvesting":"true","straightToPublishing":"true"}')}}
     # After deletion, events are retracted with this workflow
-    retract-workflow-id=retract
+    retract-workflow-id={{ opencast.lti.retractworkflow | default('retract')}}
   org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg: |
     # OAuth consumer keys with should be highly trusted.
     #
