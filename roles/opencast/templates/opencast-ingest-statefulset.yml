@@ -9,7 +9,7 @@ metadata:
     app: opencast
     type: ingest
 spec:
-  replicas: {{ opencast_worker.replicas | default(1) }}
+  replicas: {{ opencast_ingest.replicas | default(1) }}
   serviceName: '{{ meta.name }}-opencast-ingest'
   selector:
     matchLabels:
