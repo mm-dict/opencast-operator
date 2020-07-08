@@ -132,7 +132,7 @@ spec:
         {% else %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
-            claimName: {{ claimname }}
+            claimName: {{ storage.claimname }}
         {% endif %}
         - name: opencast-worker-data
           emptyDir: {}
