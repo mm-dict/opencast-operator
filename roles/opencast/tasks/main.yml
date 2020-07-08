@@ -59,7 +59,7 @@
         resources:
           requests:
             storage: '{{ pvsize }}'
-  when: createpv
+  when: createpv is defined
 
 - name: Create the general opencast configmap
   k8s:
