@@ -26,4 +26,5 @@
 - name: Create the statefulset for opencast-ingest
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-ingest-statefulset.yml') }}"

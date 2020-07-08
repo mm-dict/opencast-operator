@@ -24,4 +24,5 @@
 - name: Create the deployment for opencast-allinone
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-allinone-deployment.yml') }}"

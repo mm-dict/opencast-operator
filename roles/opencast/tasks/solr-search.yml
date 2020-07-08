@@ -39,4 +39,5 @@
 - name: Create the deployment for solr-search
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/solr-deployment.yml') }}"

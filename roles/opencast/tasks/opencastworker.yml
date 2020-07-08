@@ -30,4 +30,5 @@
 - name: Create the statefulset for opencast-worker
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-worker-statefulset.yml') }}"
