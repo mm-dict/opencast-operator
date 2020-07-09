@@ -45,6 +45,9 @@ spec:
             - name: opencast-admin-config
               mountPath: /opencast/etc/custom.properties
               subPath: custom.properties
+            - name: opencast-admin-config
+              mountPath: /opencast/bin/setenv
+              subPath: setenv
             - name: opencast-config
               mountPath: /opencast/etc/paella/config/config.json
               subPath: paella-config.json
