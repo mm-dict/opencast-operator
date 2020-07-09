@@ -27,6 +27,11 @@
         ports:
           - port: 8080
 
+- name: Create the opencast-presentation configmap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/opencast-worker-configmap.yml') }}"
+
 - name: Create the statefulset for opencast-worker
   k8s:
     state: present
