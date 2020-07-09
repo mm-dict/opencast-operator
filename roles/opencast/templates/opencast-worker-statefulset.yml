@@ -107,6 +107,9 @@ spec:
               {% endif %}
             - name: opencast-worker-data
               mountPath: /opencast/data
+            - name: opencast-worker-config
+              mountPath: /opencast/bin/setenv
+              subPath: setenv
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
               subPath: ugent-schedule-and-upload.xml
@@ -139,6 +142,9 @@ spec:
         - name: opencast-config
           configMap:
             name: {{ meta.name }}-opencast-config
+        - name: opencast-worker-config
+          configMap:
+            name: {{ meta.name }}-opencast-worker-config
         {% if extra_ldap is defined %}
         - name: {{ extra_ldap.name }}
           configMap:

@@ -17,7 +17,7 @@
           - ReadWriteMany
         resources:
           requests:
-            storage: '100Mi'
+            storage: '{{ opencast.solr_search.pvsize | default('100Mi') }}'
 
 - name: Create the solr-search service
   k8s:

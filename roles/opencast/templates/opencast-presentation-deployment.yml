@@ -48,6 +48,9 @@ spec:
             - name: opencast-presentation-config
               mountPath: /opencast/etc/custom.properties
               subPath: custom.properties
+            - name: opencast-presentation-config
+              mountPath: /opencast/bin/setenv
+              subPath: setenv
             - name: opencast-presentation-data
               mountPath: /opencast/data
             - name: opencast-config
