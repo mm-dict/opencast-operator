@@ -13,7 +13,7 @@
           - ReadWriteMany
         resources:
           requests:
-            storage: '{{ opencast.solr_series.pvsize | default('100Mi') }}'
+            storage: '{{ opencast.solr_series.pvsize | default("100Mi") }}'
 
 - name: Create the solr-series service
   k8s:
