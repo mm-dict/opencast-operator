@@ -27,6 +27,10 @@ spec:
         - name: opencast-admin
           image: '{{ opencast_admin.image }}'
           imagePullPolicy: Always
+          {% if runasuser is defined %}
+          securityContext:
+            runAsUser: {{ runasuser }}
+          {% endif %}
           ports:
             - containerPort: 8080
           env:

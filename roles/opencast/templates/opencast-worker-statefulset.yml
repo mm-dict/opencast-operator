@@ -33,6 +33,10 @@ spec:
         - name: opencast-worker
           image: '{{ opencast_worker.image }}'
           imagePullPolicy: Always
+          {% if runasuser is defined %}
+          securityContext:
+            runAsUser: {{ runasuser }}
+          {% endif %}
           ports:
             - containerPort: 8080
               name: web
