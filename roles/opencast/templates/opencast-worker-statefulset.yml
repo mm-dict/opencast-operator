@@ -101,7 +101,7 @@ spec:
               value: "9200"
           volumeMounts:
             - name: opencast-persistent-storage
-              mountPath: /data
+              mountPath: /data/opencast
               {% if storage.subpath is defined %}
               subPath: {{ storage.subpath }}
               {% endif %}

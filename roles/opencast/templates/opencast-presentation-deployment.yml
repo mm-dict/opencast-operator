@@ -38,7 +38,7 @@ spec:
               value: "true"
           volumeMounts:
             - name: opencast-persistent-storage
-              mountPath: /data
+              mountPath: /data/opencast
             - name: opencast-config
               mountPath: /opencast/etc/paella/config/config.json
               subPath: paella-config.json
