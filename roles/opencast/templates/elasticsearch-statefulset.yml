@@ -56,11 +56,11 @@ spec:
               mountPath: /usr/share/elasticsearch/data
           resources:
             requests:
-              memory: "1Gi"
-              cpu: 500m
+              memory: {{ opencast.elasticsearch.requests.memory | default('512Mi') }}
+              cpu: {{ opencast.elasticsearch.requests.cpu | default('0.5') }}
             limits:
-              memory: "2Gi"
-              cpu: "2"
+              memory: {{ opencast.elasticsearch.limits.memory | default('2Gi') }}
+              cpu: {{ opencast.elasticsearch.requests.cpu | default('2') }}
       initContainers:
         - name: increase-vm-max-map
           image: busybox

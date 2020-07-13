@@ -13,7 +13,7 @@
           - ReadWriteMany
         resources:
           requests:
-            storage: '1Gi'
+            storage: '{{ opencast.elasticsearch.pvsize | default("1Gi")}}'
 
 - name: Create the elastic service
   k8s:
