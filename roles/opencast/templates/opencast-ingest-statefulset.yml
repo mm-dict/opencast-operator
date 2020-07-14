@@ -39,15 +39,13 @@ spec:
             - containerPort: 8080
           env:
             - name: ORG_OPENCASTPROJECT_SERVER_URL
-              value: "{{ opencast_ingest.server.url}}"
+              value: "{{ opencast_ingest.server.url }}"
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
               value: "MySQL"
             - name: JAVA_MIN_MEM
-              value: "{{ opencast_ingest.java.min_mem}}"
+              value: "{{ opencast_ingest.java.min_mem }}"
             - name: JAVA_MAX_MEM
-              value: "{{ opencast_ingest.java.max_mem}}"
-            - name: ORG_OPENCASTPROJECT_SERVER_URL
-              value: ""
+              value: "{{ opencast_ingest.java.max_mem }}"
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
               value: "admin"
             - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS

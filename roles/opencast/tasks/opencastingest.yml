@@ -3,6 +3,10 @@
   set_fact:
     TYPE: opencast-ingest
 
+- name: set the server_url as a fact
+  set_fact:
+    SERVER_URL: "{{ opencast_ingest.server.url }}"
+
 - name: Create the service for the ingest statefulset
   k8s:
     state: present
