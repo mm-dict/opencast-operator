@@ -387,7 +387,7 @@ data:
     <beans xmlns="http://www.springframework.org/schema/beans" xmlns:sec="http://www.springframework.org/schema/security"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
       xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/osgi
            http://www.springframework.org/schema/osgi/spring-osgi.xsd
            http://www.springframework.org/schema/security
@@ -643,12 +643,12 @@ data:
 
         <!-- Paella player -->
         <sec:intercept-url pattern="/paella/ui/auth.html" access="ROLE_USER" />
-        <sec:intercept-url pattern="/paella/ui/**" access="ROLE_USER" />
+        <sec:intercept-url pattern="/paella/ui/**" access="ROLE_ANONYMOUS" />
 
         <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
-        <sec:intercept-url pattern="/engage/ui/**" access="ROLE_USER" />
-        <sec:intercept-url pattern="/engage/**" access="ROLE_USER" />
-        <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_USER" />
+        <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/engage/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/search/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/usertracking/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/usertracking/**" method="PUT" access="ROLE_ANONYMOUS" />
@@ -933,9 +933,6 @@ data:
       </sec:authentication-manager>
       <!-- Do not use a request cache -->
       <bean id="requestCache" class="org.springframework.security.web.savedrequest.NullRequestCache" />
-      <!-- Uncomment to enable logging interceptors -->
-      <!-- bean class="org.springframework.security.access.event.LoggerListener" / -->
-      <!-- bean class="org.springframework.security.authentication.event.LoggerListener" / -->
     </beans>
   org.apache.karaf.features.cfg: |
     ################################################################################
