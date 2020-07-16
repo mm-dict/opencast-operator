@@ -19,6 +19,7 @@
 - name: Create the configmap
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-allinone-configmap.yml') }}"
 
 - name: Create the deployment for opencast-allinone

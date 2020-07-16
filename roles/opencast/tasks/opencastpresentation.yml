@@ -45,6 +45,7 @@
 - name: Create the opencast-presentation configmap
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-presentation-configmap.yml') }}"
 
 - name: Create the deployment for opencast-presentation

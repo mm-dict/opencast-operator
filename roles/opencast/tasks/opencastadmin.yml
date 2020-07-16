@@ -45,6 +45,7 @@
 - name: Create the opencast-admin configmap
   k8s:
     state: present
+    apply: yes
     definition: "{{ lookup('template', 'templates/opencast-admin-configmap.yml') }}"
 
 - name: Create the deployment for opencast-admin
