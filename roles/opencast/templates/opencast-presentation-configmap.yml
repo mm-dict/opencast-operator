@@ -410,8 +410,6 @@ data:
       <sec:http create-session="ifRequired" servlet-api-provision="true" realm="Opencast"
         entry-point-ref="opencastEntryPoint">
 
-        <sec:access-denied-handler error-page="/403.html"/>
-
         <!-- ################ -->
         <!-- # URL SECURITY # -->
         <!-- ################ -->
@@ -465,8 +463,6 @@ data:
         <sec:intercept-url pattern="/admin-ng/series/*/metadata.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_METADATA_VIEW" />
         <sec:intercept-url pattern="/admin-ng/series/*/theme.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_THEMES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/server/servers.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERVERS_VIEW" />
-        <sec:intercept-url pattern="/admin-ng/series/*/hasEvents.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_VIEW" />
-        <sec:intercept-url pattern="/admin-ng/series/configuration.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/services/services.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERVICES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/tasks/processing.json" method="GET" access="ROLE_ADMIN, ROLE_UI_TASKS_CREATE" />
         <sec:intercept-url pattern="/admin-ng/themes/themes.json" method="GET" access="ROLE_ADMIN, ROLE_UI_THEMES_VIEW" />
@@ -479,9 +475,6 @@ data:
         <sec:intercept-url pattern="/admin-ng/users/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_USERS_EDIT" />
         <sec:intercept-url pattern="/admin-ng/user-settings/signature" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
         <sec:intercept-url pattern="/admin-ng/resources/events/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_VIEW" />
-        <sec:intercept-url pattern="/admin-ng/resources/jobs/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_JOBS_VIEW" />
-        <sec:intercept-url pattern="/admin-ng/resources/servers/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERVERS_VIEW" />
-        <sec:intercept-url pattern="/admin-ng/resources/services/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERVICES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/resources/series/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/resources/themes/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_THEMES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/resources/recordings/filters.json" method="GET" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_VIEW" />
@@ -491,8 +484,6 @@ data:
         <sec:intercept-url pattern="/admin-ng/resources/providers.json" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
         <sec:intercept-url pattern="/admin-ng/resources/THEMES.json" method="GET" access="ROLE_ADMIN, ROLE_UI_THEMES_VIEW" />
         <sec:intercept-url pattern="/admin-ng/resources/*.json" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/admin-ng/statistics/*.json" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/admin-ng/statistics/export.csv" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
         <sec:intercept-url pattern="/assets/assets/**" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
 
         <sec:intercept-url pattern="/admin-ng/acl/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_ACLS_EDIT" />
@@ -531,7 +522,6 @@ data:
         <sec:intercept-url pattern="/admin-ng/series/deleteSeries" method="POST" access="ROLE_ADMIN, ROLE_UI_SERIES_DELETE" />
         <sec:intercept-url pattern="/admin-ng/series/new" method="POST" access="ROLE_ADMIN, ROLE_UI_SERIES_CREATE" />
         <sec:intercept-url pattern="/admin-ng/series/*/access" method="POST" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_ACL_EDIT" />
-        <sec:intercept-url pattern="/admin-ng/statistics/data.json" method="POST" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
         <sec:intercept-url pattern="/admin-ng/tasks/new" method="POST" access="ROLE_ADMIN, ROLE_UI_TASKS_CREATE" />
         <sec:intercept-url pattern="/admin-ng/themes" method="POST" access="ROLE_ADMIN, ROLE_UI_THEMES_CREATE" />
         <sec:intercept-url pattern="/admin-ng/tools/*/editor.json" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_EDITOR_EDIT" />
@@ -576,8 +566,6 @@ data:
         <sec:intercept-url pattern="/api/series/*/metadata" method="GET" access="ROLE_ADMIN, ROLE_API_SERIES_METADATA_VIEW"/>
         <sec:intercept-url pattern="/api/series/*/metadata/*" method="GET" access="ROLE_ADMIN, ROLE_API_SERIES_METADATA_VIEW"/>
         <sec:intercept-url pattern="/api/series/*/properties" method="GET" access="ROLE_ADMIN, ROLE_API_SERIES_PROPERTIES_VIEW"/>
-        <sec:intercept-url pattern="/api/statistics/providers" method="GET" access="ROLE_ADMIN, ROLE_API_STATISTICS_VIEW"/>
-        <sec:intercept-url pattern="/api/statistics/providers/*" method="GET" access="ROLE_ADMIN, ROLE_API_STATISTICS_VIEW"/>
         <sec:intercept-url pattern="/api/version" method="GET" access="ROLE_ADMIN, ROLE_API"/>
         <sec:intercept-url pattern="/api/version/*" method="GET" access="ROLE_ADMIN, ROLE_API"/>
         <sec:intercept-url pattern="/api/workflows" method="GET" access="ROLE_ADMIN, ROLE_API_WORKFLOW_INSTANCE_VIEW"/>
@@ -608,7 +596,6 @@ data:
         <sec:intercept-url pattern="/api/recreateIndex/*" method="POST" access="ROLE_ADMIN"/>
         <sec:intercept-url pattern="/api/series" method="POST" access="ROLE_ADMIN, ROLE_API_SERIES_CREATE"/>
         <sec:intercept-url pattern="/api/security/sign" method="POST" access="ROLE_ADMIN, ROLE_API_SECURITY_EDIT"/>
-        <sec:intercept-url pattern="/api/statistics/data/query" method="POST" access="ROLE_ADMIN, ROLE_API_STATISTICS_VIEW"/>
         <sec:intercept-url pattern="/api/workflows" method="POST" access="ROLE_ADMIN, ROLE_API_WORKFLOW_INSTANCE_CREATE"/>
         <!-- External API DELETE Endpoints -->
         <sec:intercept-url pattern="/api/events/*" method="DELETE" access="ROLE_ADMIN, ROLE_API_EVENTS_DELETE"/>
@@ -622,46 +609,36 @@ data:
         <sec:intercept-url pattern="/api/series/*/metadata/*" method="DELETE" access="ROLE_ADMIN, ROLE_API_SERIES_METADATA_DELETE"/>
         <sec:intercept-url pattern="/api/workflows/*" method="DELETE" access="ROLE_ADMIN, ROLE_API_WORKFLOW_INSTANCE_DELETE"/>
 
-        <!-- Enable anonymous access to the admin ui -->
-        <sec:intercept-url pattern="/admin-ng/fonts/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/admin-ng/img/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/admin-ng/css/**" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/admin-ng/lib/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/admin-ng/img/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/admin-ng/js/**" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/admin-ng/modules/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/admin-ng/public/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/admin-ng/scripts/**" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/admin-ng/shared/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/admin-ng/styles/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/admin-ng/app.js" access="ROLE_ANONYMOUS" />
 
-        <!-- Enable anonymous access to the /info/** resource -->
+        <!-- Enable anonymous access to the admin ui -->
+        <sec:intercept-url pattern="/admin-ng/public/**" access="ROLE_ANONYMOUS" />
+
+        <!-- Enable anonymous access to the /info/me.json resource -->
         <sec:intercept-url pattern="/info/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/i18n/languages.json" method="GET" access="ROLE_ANONYMOUS" />
-
-        <!-- anonymous access to user interface configuration -->
-        <sec:intercept-url pattern="/ui/config/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/info/components.json" method="GET" access="ROLE_ANONYMOUS" />
 
         <!-- Paella player -->
         <sec:intercept-url pattern="/paella/ui/auth.html" access="ROLE_USER" />
         <sec:intercept-url pattern="/paella/ui/**" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/ui/config/paella/**" access="ROLE_ANONYMOUS" />
 
         <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
-        <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/engage/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_ANONYMOUS" />
+        <sec:intercept-url pattern="/engage/ui/**" access="ROLE_USER" />
+        <sec:intercept-url pattern="/engage/**" access="ROLE_USER" />
+        <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_USER" />
         <sec:intercept-url pattern="/search/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/usertracking/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/usertracking/**" method="PUT" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/static/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/export/**" method="GET" access="ROLE_ANONYMOUS" />
-
-        <!-- Enable access to Opencast Studio -->
-        <!-- Admins can access it, as can users with 'ROLE_STUDIO'. A few static -->
-        <!-- files are also accessible to everyone: 'manifest.json' and source maps -->
-        <!-- are requested without cookies by most browsers. To prevent random -->
-        <!-- errors, we make those files public. They do not contain any secrets. -->
-        <sec:intercept-url pattern="/studio/manifest.json" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/studio/static/js/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/studio/**" access="ROLE_ADMIN, ROLE_STUDIO" />
-
 
         <!-- Enable anonymous access to the annotation and the series endpoints -->
         <sec:intercept-url pattern="/series/**" method="GET" access="ROLE_ANONYMOUS, ROLE_CAPTURE_AGENT" />
@@ -672,8 +649,8 @@ data:
         <!-- The OAI-PMH specification demands boths GET and POST requests  -->
         <!-- Please make sure that the path configured here matches         -->
         <!-- the path configured for the repository servlet.                -->
-        <sec:intercept-url pattern="/oaipmh/**" method="GET" access="ROLE_ADMIN"/>
-        <sec:intercept-url pattern="/oaipmh/**" method="POST" access="ROLE_ADMIN"/>
+        <sec:intercept-url pattern="/oaipmh/**" method="GET" access="ROLE_ANONYMOUS"/>
+        <sec:intercept-url pattern="/oaipmh/**" method="POST" access="ROLE_ANONYMOUS"/>
 
         <!-- Enable anonymous access to the rss and atom feeds -->
         <sec:intercept-url pattern="/feeds/**" method="GET" access="ROLE_ANONYMOUS" />
@@ -688,30 +665,28 @@ data:
         <!-- Enable capture agent updates and ingest -->
         <sec:intercept-url pattern="/capture-admin/**" access="ROLE_ADMIN, ROLE_CAPTURE_AGENT" />
         <sec:intercept-url pattern="/recordings/**" method="GET" access="ROLE_ADMIN, ROLE_CAPTURE_AGENT" />
-        <sec:intercept-url pattern="/ingest/**" access="ROLE_ADMIN, ROLE_CAPTURE_AGENT, ROLE_STUDIO" />
+        <sec:intercept-url pattern="/ingest/**" access="ROLE_ADMIN, ROLE_CAPTURE_AGENT" />
 
         <!-- Secure the user management URLs for admins only -->
         <sec:intercept-url pattern="/users/**" access="ROLE_ADMIN" />
         <sec:intercept-url pattern="/admin/users.html" access="ROLE_ADMIN" />
 
         <!-- Enable 2-legged OAuth access ("signed fetch") to the LTI launch servlet -->
-        <sec:intercept-url pattern="/lti/**" access="ROLE_OAUTH_USER" />
+        <sec:intercept-url pattern="/lti" access="ROLE_OAUTH_USER" />
+        <sec:intercept-url pattern="/lti/ci" access="ROLE_OAUTH_USER" />
 
         <!-- Enable access to the LTI tools -->
         <sec:intercept-url pattern="/ltitools/**" access="ROLE_OAUTH_USER" />
 
-        <!-- Enable access to the LTI service -->
-        <sec:intercept-url pattern="/lti-service/**" access="ROLE_OAUTH_USER" />
-        <sec:intercept-url pattern="/lti-service-gui/**" access="ROLE_OAUTH_USER" />
         <sec:intercept-url pattern="/transcripts/watson/results*" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/transcripts/watson/results*" method="POST" access="ROLE_ANONYMOUS" />
 
         <!-- Everything else is for the admin users -->
-        <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/admin-ng/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
-        <sec:intercept-url pattern="/**" access="ROLE_ADMIN" />
+        <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
+        <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
+        <sec:intercept-url pattern="/admin-ng/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
+        <sec:intercept-url pattern="/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
+        <sec:intercept-url pattern="/**" access="ROLE_ADMIN, ROLE_COURSE_ADMIN" />
 
         <!-- ############################# -->
         <!-- # LOGIN / LOGOUT MECHANISMS # -->
