@@ -738,9 +738,6 @@ data:
         <sec:custom-filter ref="shibbolethHeaderFilter" position="PRE_AUTH_FILTER"/>
         -->
 
-        <!-- CAS auth is used for authentication via browsers -->
-        <sec:custom-filter position="FORM_LOGIN_FILTER" ref="casFilter" />
-
         <!-- Enables "remember me" functionality -->
         <sec:remember-me key="opencast" user-service-ref="userDetailsService" />
         <!-- Set the request cache -->
