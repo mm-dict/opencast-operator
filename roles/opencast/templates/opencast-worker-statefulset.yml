@@ -11,6 +11,8 @@ metadata:
 spec:
   replicas: {{ opencast_worker.replicas }}
   serviceName: '{{ meta.name }}-opencast-worker'
+  nodeSelector:
+    ugent.be/opencast-transcoder: ''
   selector:
     matchLabels:
       app: opencast
