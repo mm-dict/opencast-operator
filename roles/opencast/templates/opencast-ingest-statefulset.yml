@@ -85,7 +85,7 @@ spec:
                   name: '{{ meta.name }}-opencast-activemq'
                   key: activemq-password
             - name: PROP_ORG_OPENCASTPROJECT_PLAYER
-              value: "/paella/ui/watch.html?id=#{id}"
+              value: "{{ opencast.player | default('/paella/ui/watch.html?id=#{id}') }}"
             - name: PROP_ORG_OPENCASTPROJECT_ADMIN_UI_URL
               value: "{{ opencast.admin.ui.url }}"
             - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
