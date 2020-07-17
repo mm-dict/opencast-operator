@@ -397,7 +397,15 @@ data:
       <!-- # Open and unsecured url patterns      # -->
       <!-- ######################################## -->
 
+      <sec:http pattern="/admin/img/**" security="none" />
       <sec:http pattern="/favicon.ico" security="none" />
+      <sec:http pattern="/img/**" security="none" />
+      <sec:http pattern="/js/**" security="none" />
+      <sec:http pattern="/lib/**" security="none" />
+      <sec:http pattern="/admin-ng/fonts/**" security="none" />
+      <sec:http pattern="/admin-ng/scripts/**" security="none" />
+      <sec:http pattern="/admin-ng/styles/**" security="none" />
+      <sec:http pattern="/play/*" security="none" />
 
       <sec:http create-session="ifRequired" servlet-api-provision="true" realm="Opencast"
         entry-point-ref="opencastEntryPoint">
@@ -411,15 +419,6 @@ data:
         <!-- Allow anonymous access to the login form -->
         <sec:intercept-url pattern="/admin-ng/login.html" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/sysinfo/bundles/version" method="GET" access="ROLE_ANONYMOUS" />
-
-        <!-- Allow anonymous access to resources from runtime info ui -->
-        <sec:intercept-url pattern="/img/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/js/**" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/docs.*" access="ROLE_ANONYMOUS" />
-        <sec:intercept-url pattern="/rest_docs.*" access="ROLE_ANONYMOUS" />
-
-        <!-- Allow anonymous access to the player redirect -->
-        <sec:intercept-url pattern="/play/*" access="ROLE_ANONYMOUS" />
 
         <!-- Protect admin UI facade -->
         <sec:intercept-url pattern="/workflow/definitions.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_CREATE" />
