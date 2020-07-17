@@ -704,13 +704,8 @@ data:
         <sec:custom-filter position="BASIC_AUTH_FILTER" ref="authenticationFilters" />
 
         <sec:custom-filter ref="asyncTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
-
         <!-- Opencast is shipping its own implementation of the anonymous filter -->
         <sec:custom-filter ref="anonymousFilter" position="ANONYMOUS_FILTER" />
-
-        <!-- Shibboleth header authentication filter
-        <sec:custom-filter ref="shibbolethHeaderFilter" position="PRE_AUTH_FILTER"/>
-        -->
 
         <!-- Enables "remember me" functionality -->
         <sec:remember-me key="opencast" user-service-ref="userDetailsService" />
@@ -722,28 +717,16 @@ data:
         <sec:logout logout-success-url="/cas-logout.jsp"/>
         <sec:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
         <sec:custom-filter ref="singleLogoutFilter" before="FORM_LOGIN_FILTER"/>
-
-        <!-- Enables log out -->
-        <sec:logout success-handler-ref="logoutSuccessHandler" />
-
-        <!-- Shibboleth log out
-         Please specifiy the URL to return to after logging out
-        <sec:logout logout-success-url="/Shibboleth.sso/Logout?return=http://www.opencast.org" />
-        -->
-
       </sec:http>
-
       <!-- ############################# -->
       <!-- # Authentication Filters    # -->
       <!-- ############################# -->
-
       <bean id="authenticationFilters" class="org.springframework.web.filter.CompositeFilter">
         <property name="filters">
           <list>
             <!-- Digest auth is used by capture agents and is used to enable transparent clustering of services -->
             <!-- ATTENTION! Do not deactivate the digest filter, otherwise the distributed setup would not work -->
             <ref bean="digestFilter" />
-
             <!-- Basic authentication  -->
             <ref bean="basicAuthenticationFilter" />
             <!-- 2-legged OAuth is used by trusted 3rd party applications, including LTI. -->
@@ -781,11 +764,6 @@ data:
         <property name="digestAuthenticationEntryPoint" ref="digestEntryPoint" />
       </bean>
 
-      <!-- Redirects unauthenticated requests to the login form -->
-      <bean id="userEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-        <property name="loginFormUrl" value="/admin-ng/login.html" />
-      </bean>
-
       <!-- Returns a 401 request for authentication via digest auth -->
       <bean id="digestEntryPoint" class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
         <property name="realmName" value="Opencast" />
@@ -807,11 +785,7 @@ data:
             <!-- Any role not listed explicitly will redirect here -->
           </map>
         </property>
-      </bean>
-
-      <bean id="logoutSuccessHandler" class="org.opencastproject.kernel.security.LogoutSuccessHandler">
-        <property name="userDirectoryService" ref="userDirectoryService" />
-      </bean>
+      </bean> 
 
       <!-- ################# -->
       <!-- # Digest Filter # -->

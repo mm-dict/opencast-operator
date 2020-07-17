@@ -120,6 +120,9 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
               subPath: ugent-partial-publish.xml
+            - name: opencast-config
+              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
+              subPath: org.ops4j.pax.logging.cfg
             {% if extra_ldap is defined%}
             - name: {{ extra_ldap.name }}
               mountPath: {{ extra_ldap.configmap.mountpath }}

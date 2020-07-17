@@ -67,6 +67,9 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
               subPath: ugent-partial-publish.xml
+            - name: opencast-config
+              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
+              subPath: org.ops4j.pax.logging.cfg
             - name: opencast-admin-data
               mountPath: /opencast/data
             {% if opencast.lti is defined %}
