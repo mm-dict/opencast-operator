@@ -1302,7 +1302,9 @@ data:
     #log4j2.logger.ingest.name = org.opencastproject.ingest
     #log4j2.logger.ingest.level = DEBUG
 
-    {{ opencast.loglevel.extra | default('') }}
+    # extra logging for spring security
+    log4j2.logger.springsecurity.name = org.springframework.security
+    log4j2.logger.springsecurity.level = DEBUG
 
     # For Karaf, Felix & CXF, we want to see some more details in the logs
     log4j2.logger.karaf.name = org.apache.karaf
