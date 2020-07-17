@@ -572,7 +572,7 @@ data:
           },
           {
             "name": "flash",
-            "enabled": true
+            "enabled": false
           },
           {
             "name": "image",
@@ -582,11 +582,18 @@ data:
         "methods": [
           {
             "factory": "HLSVideoFactory",
-            "enabled": true
-          },
-          {
-            "factory": "MpegDashVideoFactory",
-            "enabled": false
+            "enabled": true,
+            "config": {
+              "*** You can add more hls.js settings here": "https://github.com/video-dev/hls.js/blob/master/docs/API.md",
+              "maxBufferLength": 30,
+              "maxMaxBufferLength": 600,
+              "maxBufferSize": 60000000,
+              "maxBufferHole": 0.5,
+              "lowBufferWatchdogPeriod": 0.5,
+              "highBufferWatchdogPeriod": 3
+            },
+            "iOSMaxStreams": 1,
+            "androidMaxStreams": 1
           },
           {
             "factory": "ChromaVideoFactory",
@@ -598,6 +605,10 @@ data:
           },
           {
             "factory": "Html5VideoFactory",
+            "enabled": true
+          },
+          {
+            "factory": "MpegDashVideoFactory",
             "enabled": true
           },
           {
@@ -627,10 +638,6 @@ data:
             "enabled": true
           }
         ],
-        "audio": {
-            "master": 1.0,
-            "slave": 0
-        },
         "rtmpSettings": {
           "bufferTime": 5,
           "requiresSubscription": false
@@ -673,12 +680,23 @@ data:
         "//**** Instructions: Disable any individual plugin by setting its enable property to false": {
           "enabled": false
         },
-        "//**** For a list of available plugins and configuration, go to": "https://github.com/polimediaupv/paella/blob/master/doc/plugins.md",
+        "//**** For a list of available plugins and configuration, go to": "https://github.com/polimediaupv/paella/blob/develop/doc/adopters/plugins.md",
         "list": {
           "es.upv.paella.opencast.loader": {
-            "flavors": [
-              ["*", "delivery"]
-            ]
+            "orderTracks": ["presenter/delivery", "presenter/preview", "presentation/delivery", "presentation/preview"],
+            "streams": [
+              {
+                "filter": {
+                  "system": ["*"]
+                },
+                "tracks": {
+                  "flavors": ["*/*"],
+                  "tags": []
+                }
+              }
+            ],
+            "audioTag": {
+            }
           },
           "//**** Video profile plugins": "",
           "es.upv.paella.singleStreamProfilePlugin": {
@@ -687,7 +705,6 @@ data:
                 { "icon":"professor_icon.svg", "id":"presenter", "content":["presenter"]},
                 { "icon":"slide_icon.svg", "id":"presentation", "content":["presentation"]}
               ]
-
           },
           "es.upv.paella.dualStreamProfilePlugin": { "enabled":true,
             "videoSets": [
@@ -697,7 +714,7 @@ data:
             ]
           },
           "es.upv.paella.tripleStreamProfilePlugin": {
-            "enabled": false,
+            "enabled": true,
             "videoSets": [
               { "icon":"three_streams_icon.svg", "id":"presenter_presentation_presenter2", "content":["presenter","presentation","multitrack"] },
               { "icon":"three_streams_icon.svg", "id":"presenter_presentation_presenter3", "content":["presenter","presentation","presenter-2"] },
@@ -753,8 +770,7 @@ data:
               1,
               1.25,
               1.5,
-              2,
-              2.5
+              2
             ]
           },
           "es.upv.paella.playPauseButtonPlugin": {
@@ -777,7 +793,7 @@ data:
           "es.upv.paella.volumeRangePlugin": {
             "enabled": true,
             "showMasterVolume": true,
-            "showSlaveVolume": true
+            "showSlaveVolume": false
           },
           "es.upv.paella.pipModePlugin": {
             "enabled": true
@@ -785,7 +801,7 @@ data:
           "es.upv.paella.ratePlugin": {
             "enabled": false
           },
-          "es.upv.paella.audioLanguage": {
+          "es.upv.paella.audioSelector": {
             "enabled": true
           },
           "es.upv.paella.videoZoomPlugin": {
@@ -808,7 +824,10 @@ data:
           },
           "es.upv.paella.arrowSlidesNavigatorPlugin": {
             "enabled": true,
-            "showArrowsIn": "slave"
+            "content":[
+              "presentation",
+              "presenter"
+            ]
           },
           "es.upv.paella.videoDataPlugin": {
             "enabled": false,
@@ -837,17 +856,11 @@ data:
           "es.upv.paella.playButtonOnScreenPlugin": {
             "enabled": true
           },
-          "es.upv.paella.test.videoLoadPlugin": {
-            "enabled": false
-          },
           "es.upv.paella.translecture.captionsPlugin": {
             "enabled": true
           },
           "es.upv.paella.trimmingPlayerPlugin": {
             "enabled": true
-          },
-          "es.upv.paella.zoomPlugin": {
-            "enabled": false
           },
           "es.upv.paella.windowTitlePlugin": {
             "enabled": true
@@ -888,34 +901,26 @@ data:
             "heartbeat": 30,
             "client_id": "Opencast - Paella Player"
           },
-          {% else %}
+          {% endif %}
           "org.opencast.usertracking.MatomoSaverPlugIn": {
             "enabled": false,
-            "server": "https://matomo.ugent.be/",
-            "site_id": 71,
+            "server": "http://localhost/piwik/",
+            "site_id": 1,
             "heartbeat": 30,
-            "client_id": "Opencast - Paella Player"
+            "client_id": "Paella Player"
           },
-          {% endif %}
+          "org.opencast.usertracking.x5gonSaverPlugIn": {
+            "enabled": false,
+            "token": "X5GON_TOKEN",
+            "testing_environment" : false
+          },
           "es.teltek.paella.usertracking.xAPISaverPlugin": {
             "enabled": false,
             "endpoint": "http://localhost:8081/data/xAPI/",
             "auth": "auth_key"
           },
-          "es.upv.paella.legalPlugin": {
-            "enabled": true,
-                "label": "Legal info",
-                "position": "right",
-            "legalUrl": "https://en.wikipedia.org/wiki/General_Data_Protection_Regulation"
-          },
-          "es.upv.paella.audioSelector": {
-            "enabled": true
-          },
           "es.upv.paella.opencast.descriptionPlugin": {
             "enabled": true
-          },
-          "es.upv.paella.defaultKeysPlugin": {
-            "enabled":true
           },
           "es.upv.paella.opencast.downloadsPlugin": {
             "enabled": true
@@ -933,6 +938,9 @@ data:
             "enabled": true
           },
           "es.upv.paella.opencast.userTrackingSaverPlugIn": {
+            "enabled": true
+          },
+          "es.upv.paella.defaultKeysPlugin": {
             "enabled": true
           }
         }
