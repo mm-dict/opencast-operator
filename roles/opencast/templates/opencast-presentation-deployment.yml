@@ -47,7 +47,7 @@ spec:
               subPath: {{ storage.subpath }}
               {% endif %}
             - name: opencast-config
-              mountPath: /opencast/etc/paella/config/config.json
+              mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
               subPath: paella-config.json
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
