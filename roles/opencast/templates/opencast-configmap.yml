@@ -690,7 +690,7 @@ data:
                   "system": ["*"]
                 },
                 "tracks": {
-                  "flavors": ["*/*"],
+                  "flavors": ["*/delivery"],
                   "tags": []
                 }
               }
