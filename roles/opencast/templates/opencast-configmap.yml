@@ -1384,7 +1384,7 @@ data:
                 <configurations>
                     <configuration key="source-flavor-lower">presentation/delivery</configuration>
                     <configuration key="source-flavor-upper">presenter/delivery</configuration>
-                    <configuration key="encoding-profile">ugent.dual.http</configuration>
+                    <configuration key="encoding-profile">mp4-preview.dual.http</configuration>
                     <configuration key="target-flavor">composite/download</configuration>
                     <configuration key="target-tags">engage-download</configuration>
                     <configuration key="output-resolution">1280x800</configuration>
