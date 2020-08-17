@@ -690,7 +690,7 @@ data:
                   "system": ["*"]
                 },
                 "tracks": {
-                  "flavors": ["*/delivery"],
+                  "flavors": ["*/delivery "],
                   "tags": []
                 }
               }
@@ -1326,3 +1326,116 @@ data:
     log4j2.appender.osgi.type = PaxOsgi
     log4j2.appender.osgi.name = PaxOsgi
     log4j2.appender.osgi.filter = *
+  ugent-import.xml: |
+    <definition
+        xmlns="http://workflow.opencastproject.org">
+        <id>ugent-import</id>
+        <title>UGENT - Import Mediapackage and Publish without reencode</title>
+        <description>A minimal Workflow that only publishes a Mediapackage</description>
+        <tags>
+            <tag></tag>
+        </tags>
+        <operations>
+            <operation
+              id="ingest-download"
+              description="Ingesting external elements">
+                <configurations>
+                    <configuration key="delete-external">true</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="series"
+              description="Applying access control entries from series"
+              fail-on-error="true"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="apply-acl">true</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="inspect"
+              description="Inspecting audio and video streams"
+              fail-on-error="true"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="overwrite">false</configuration>
+                    <configuration key="accept-no-media">false</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="tag"
+              description="Tagging source material for archival">
+                <configurations>
+                    <configuration key="source-flavors">*/*</configuration>
+                    <configuration key="target-tags">+archive</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="snapshot"
+              description="Archiving uploaded items"
+              fail-on-error="true"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="source-tags">archive</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="publish-configure"
+              description="Publish to preview publication channel"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="source-tags">engage-download</configuration>
+                    <configuration key="channel-id">api</configuration>
+                    <configuration key="url-pattern">http://localhost:8080/admin-ng/index.html#/events/events/${event_id}/tools/playback</configuration>
+                    <configuration key="check-availability">true</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="publish-configure"
+              description="Publish to external api"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="source-tags">engage-download,,engage-streaming</configuration>
+                    <configuration key="channel-id">api</configuration>
+                    <configuration key="url-pattern">http://localhost:8080/api/events/${event_id}</configuration>
+                    <configuration key="check-availability">true</configuration>
+                    <configuration key="with-published-elements">false</configuration>
+                    <configuration key="mimetype">application/json</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="publish-engage"
+              description="Publishing to Engage"
+              max-attempts="2"
+              fail-on-error="true"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="download-source-flavors">dublincore/*,security/*</configuration>
+                    <configuration key="download-source-tags">engage-download,atom,rss,mobile</configuration>
+                    <configuration key="streaming-source-tags">engage-streaming</configuration>
+                    <configuration key="check-availability">true</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="snapshot"
+              description="Archiving"
+              fail-on-error="true"
+              exception-handler-workflow="partial-error">
+                <configurations>
+                    <configuration key="source-tags">archive</configuration>
+                </configurations>
+            </operation>
+            <operation
+              id="cleanup"
+              description="Cleaning up"
+              fail-on-error="false">
+                <configurations>
+                    <configuration key="delete-external">true</configuration>
+                    <configuration key="preserve-flavors">security/*</configuration>
+                </configurations>
+            </operation>
+        </operations>
+        <roles>
+            <role></role>
+        </roles>
+    </definition>
