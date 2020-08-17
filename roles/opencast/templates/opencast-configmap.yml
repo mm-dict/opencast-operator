@@ -1330,59 +1330,70 @@ data:
     <definition
         xmlns="http://workflow.opencastproject.org">
         <id>ugent-import</id>
-        <title>UGENT - Import Mediapackage and Publish without reencode</title>
+        <title>UGENT-Import Mediapackage and Publish without reencode</title>
         <description>A minimal Workflow that only publishes a Mediapackage</description>
         <tags>
             <tag></tag>
         </tags>
         <operations>
-            <operation
-              id="ingest-download"
-              description="Ingesting external elements">
+            <operation id="ingest-download" description="Ingesting external elements">
                 <configurations>
                     <configuration key="delete-external">true</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="series"
-              description="Applying access control entries from series"
-              fail-on-error="true"
-              exception-handler-workflow="partial-error">
+            <operation id="series" description="Applying access control entries from series" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="apply-acl">true</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="inspect"
-              description="Inspecting audio and video streams"
-              fail-on-error="true"
-              exception-handler-workflow="partial-error">
+            <operation id="inspect" description="Inspecting audio and video streams" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="overwrite">false</configuration>
                     <configuration key="accept-no-media">false</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="tag"
-              description="Tagging source material for archival">
+            <operation id="tag" description="Tagging presentation source material for archival">
                 <configurations>
-                    <configuration key="source-flavors">*/*</configuration>
-                    <configuration key="target-tags">+archive</configuration>
+                    <configuration key="source-flavors">presentation/delivery</configuration>
+                    <configuration key="target-tags">archive</configuration>
+                    <configuration key="target-flavors">presentation/source</configuration>
+                    <configuration key="source-tags">*</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="snapshot"
-              description="Archiving uploaded items"
-              fail-on-error="true"
-              exception-handler-workflow="partial-error">
+            <operation id="tag" description="Tagging presenter source material for archival">
+                <configurations>
+                    <configuration key="source-flavors">presenter/delivery</configuration>
+                    <configuration key="target-tags">archive</configuration>
+                    <configuration key="target-flavors">presenter/source</configuration>
+                    <configuration key="source-tags">*</configuration>
+                </configurations>
+            </operation>
+            <operation id="snapshot" description="Archiving uploaded items" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="source-tags">archive</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="publish-configure"
-              description="Publish to preview publication channel"
-              exception-handler-workflow="partial-error">
+            <operation id="tag" description="Tagging source material for delivery">
+                <configurations>
+                    <configuration key="source-flavors">*/source</configuration>
+                    <configuration key="target-tags">-archive,engage-streaming</configuration>
+                    <configuration key="target-flavors">*/delivery</configuration>
+                </configurations>
+            </operation>
+            <operation id="composite" description="Create SbS video for download" fail-on-error="false" exception-handler-workflow="">
+                <configurations>
+                    <configuration key="source-flavor-lower">presentation/delivery</configuration>
+                    <configuration key="source-flavor-upper">presenter/delivery</configuration>
+                    <configuration key="encoding-profile">ugent.dual.http</configuration>
+                    <configuration key="target-flavor">composite/download</configuration>
+                    <configuration key="target-tags">engage-download</configuration>
+                    <configuration key="output-resolution">1280x800</configuration>
+                    <configuration key="output-background">0x000000FF</configuration>
+                    <configuration key="layout-single">{"horizontalCoverage":1.0,"anchorOffset":{"referring":{"left":1.0,"top":0.0},"reference":{"left":1.0,"top":0.0},"offset":{"x":0,"y":0}}};</configuration>
+                    <configuration key="layout-multiple">{"horizontalCoverage":0.5,"anchorOffset":{"referring":{"left":1.0,"top":0.0},"reference":{"left":1.0,"top":0.0},"offset":{"x":0,"y":0}}};               {"horizontalCoverage":0.5,"anchorOffset":{"referring":{"left":0.0,"top":0.0},"reference":{"left":0.0,"top":0.0},"offset":{"x":0,"y":0}}};</configuration>
+                </configurations>
+            </operation>
+            <operation id="publish-configure" description="Publish to preview publication channel" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="source-tags">engage-download</configuration>
                     <configuration key="channel-id">api</configuration>
@@ -1390,10 +1401,7 @@ data:
                     <configuration key="check-availability">true</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="publish-configure"
-              description="Publish to external api"
-              exception-handler-workflow="partial-error">
+            <operation id="publish-configure" description="Publish to external api" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="source-tags">engage-download,,engage-streaming</configuration>
                     <configuration key="channel-id">api</configuration>
@@ -1403,12 +1411,7 @@ data:
                     <configuration key="mimetype">application/json</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="publish-engage"
-              description="Publishing to Engage"
-              max-attempts="2"
-              fail-on-error="true"
-              exception-handler-workflow="partial-error">
+            <operation id="publish-engage" description="Publishing to Engage" max-attempts="2" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="download-source-flavors">dublincore/*,security/*</configuration>
                     <configuration key="download-source-tags">engage-download,atom,rss,mobile</configuration>
@@ -1416,19 +1419,12 @@ data:
                     <configuration key="check-availability">true</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="snapshot"
-              description="Archiving"
-              fail-on-error="true"
-              exception-handler-workflow="partial-error">
+            <operation id="snapshot" description="Archiving" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="source-tags">archive</configuration>
                 </configurations>
             </operation>
-            <operation
-              id="cleanup"
-              description="Cleaning up"
-              fail-on-error="false">
+            <operation id="cleanup" description="Cleaning up" fail-on-error="false">
                 <configurations>
                     <configuration key="delete-external">true</configuration>
                     <configuration key="preserve-flavors">security/*</configuration>
