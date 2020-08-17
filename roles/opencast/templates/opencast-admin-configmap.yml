@@ -99,7 +99,7 @@ data:
     # requires separate installation.
     {% if opencast.streaming.url is defined %}
     org.opencastproject.streaming.url={{ opencast.streaming.url }}
-    org.opencastproject.streaming.port=1935
+    org.opencastproject.streaming.port={{ opencast.streaming.port | default('1935') }}
     {% endif %}
 
     # The directory where Opencast stores the streams
