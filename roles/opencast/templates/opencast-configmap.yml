@@ -690,7 +690,7 @@ data:
                   "system": ["*"]
                 },
                 "tracks": {
-                  "flavors": ["*/delivery "],
+                  "flavors": ["*/delivery"],
                   "tags": []
                 }
               }
@@ -1352,32 +1352,21 @@ data:
                     <configuration key="accept-no-media">false</configuration>
                 </configurations>
             </operation>
-            <operation id="tag" description="Tagging presentation source material for archival">
+            <operation id="tag" description="Tagging source material for archival">
                 <configurations>
-                    <configuration key="source-flavors">presentation/delivery</configuration>
-                    <configuration key="target-tags">archive</configuration>
-                    <configuration key="target-flavors">presentation/source</configuration>
-                    <configuration key="source-tags">*</configuration>
+                    <configuration key="source-flavors">*/delivery</configuration>
+                    <configuration key="target-tags">+archive</configuration>
                 </configurations>
             </operation>
-            <operation id="tag" description="Tagging presenter source material for archival">
+            <operation id="tag" description="Tagging source material for archival">
                 <configurations>
-                    <configuration key="source-flavors">presenter/delivery</configuration>
-                    <configuration key="target-tags">archive</configuration>
-                    <configuration key="target-flavors">presenter/source</configuration>
-                    <configuration key="source-tags">*</configuration>
+                    <configuration key="source-flavors">*/delivery</configuration>
+                    <configuration key="target-tags">+archive</configuration>
                 </configurations>
             </operation>
             <operation id="snapshot" description="Archiving uploaded items" fail-on-error="true" exception-handler-workflow="partial-error">
                 <configurations>
                     <configuration key="source-tags">archive</configuration>
-                </configurations>
-            </operation>
-            <operation id="tag" description="Tagging source material for delivery">
-                <configurations>
-                    <configuration key="source-flavors">*/source</configuration>
-                    <configuration key="target-tags">-archive,engage-streaming</configuration>
-                    <configuration key="target-flavors">*/delivery</configuration>
                 </configurations>
             </operation>
             <operation id="composite" description="Create SbS video for download" fail-on-error="false" exception-handler-workflow="">
