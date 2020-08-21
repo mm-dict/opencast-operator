@@ -901,7 +901,7 @@ data:
             "heartbeat": 30,
             "client_id": "Opencast - Paella Player"
           },
-          {% endif %}
+          {% else %}
           "org.opencast.usertracking.MatomoSaverPlugIn": {
             "enabled": false,
             "server": "http://localhost/piwik/",
@@ -909,6 +909,7 @@ data:
             "heartbeat": 30,
             "client_id": "Paella Player"
           },
+          {% endif %}
           "org.opencast.usertracking.x5gonSaverPlugIn": {
             "enabled": false,
             "token": "X5GON_TOKEN",
