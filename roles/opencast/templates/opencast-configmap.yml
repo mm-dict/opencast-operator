@@ -1054,6 +1054,7 @@ data:
         <tags>
             <tag>upload</tag>
             <tag>schedule</tag>
+            <tag>archive</tag>
         </tags>
         <operations>
             <operation description="Applying default configuration values" id="defaults">
