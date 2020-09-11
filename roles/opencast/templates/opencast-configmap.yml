@@ -1062,7 +1062,6 @@ data:
                     <configuration key="uploadedSearchPreview">false</configuration>
                     <configuration key="thumbnailType">0</configuration>
                     <configuration key="thumbnailPosition">1</configuration>
-                    <configuration key="download-source-flavors">composition/source</configuration>
                 </configurations>
             </operation>
             <operation description="Finalize upload and ingest" id="include">
@@ -1136,13 +1135,9 @@ data:
                     <configuration key="source-flavor">*/work</configuration>
                 </configurations>
             </operation>
-            <operation
-                description="Tagging uploaded assets for distribution"
-                exception-handler-workflow="partial-error"
-                fail-on-error="false"
-                id="tag">
+            <operation description="Tagging composition source asset for distribution to download" exception-handler-workflow="partial-error" fail-on-error="false" id="tag">
                 <configurations>
-                    <configuration key="source-flavors">${download-source-flavors}</configuration>
+                    <configuration key="source-flavors">composition/source</configuration>
                     <configuration key="target-tags">+engage-download</configuration>
                 </configurations>
             </operation>
