@@ -1136,7 +1136,11 @@ data:
                     <configuration key="source-flavor">*/work</configuration>
                 </configurations>
             </operation>
-            <operation description="Tagging uploaded assets for distribution" exception-handler-workflow="partial-error" id="tag" if="${downloadSourceflavorsExist}">
+            <operation
+                description="Tagging uploaded assets for distribution"
+                exception-handler-workflow="partial-error"
+                fail-on-error="false"
+                id="tag">
                 <configurations>
                     <configuration key="source-flavors">${download-source-flavors}</configuration>
                     <configuration key="target-tags">+engage-download</configuration>
