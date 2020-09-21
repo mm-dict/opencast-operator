@@ -51,6 +51,8 @@ spec:
               value: "false"
             - name: xpack.monitoring.enabled
               value: "false"
+            - name: bootstrap.memory_lock
+              value: "true"
           volumeMounts:
             - name: elasticsearch-persistent-storage
               mountPath: /usr/share/elasticsearch/data
@@ -70,6 +72,11 @@ spec:
         - name: increase-fd-ulimit
           image: busybox
           command: ["sh", "-c", "ulimit -n 65536"]
+          securityContext:
+            privileged: true
+        - name: increase-lockmem-ulimit
+          image: busybox
+          command: ["sh", "-c", "ulimit -l unlimited"]
           securityContext:
             privileged: true
       volumes:
