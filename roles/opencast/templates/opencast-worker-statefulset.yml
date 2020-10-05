@@ -131,6 +131,9 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/encoding/ugent-adaptive-streaming-movies.properties
               subPath: ugent-adaptive-streaming-movies.properties
+            - name: opencast-config
+              mountPath: /opencast/etc/encoding/adaptive-streaming-movies.properties
+              subPath: adaptive-streaming-movies.properties
             {% if extra_ldap is defined%}
             - name: {{ extra_ldap.name }}
               mountPath: {{ extra_ldap.configmap.mountpath }}
