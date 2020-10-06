@@ -62,7 +62,7 @@ spec:
               cpu: {{ opencast.elasticsearch.resources.requests.cpu | default('0.5') }}
             limits:
               memory: {{ opencast.elasticsearch.resources.limits.memory | default('2Gi') }}
-              cpu: {{ opencast.elasticsearch.resources.requests.cpu | default('2') }}
+              cpu: {{ opencast.elasticsearch.resources.limits.cpu | default('2') }}
       initContainers:
         - name: increase-vm-max-map
           image: busybox
