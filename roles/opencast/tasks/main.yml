@@ -67,6 +67,12 @@
     apply: yes
     definition: "{{ lookup('template', 'templates/opencast-configmap.yml') }}"
 
+- name: Create the general newrelic configmap
+  k8s:
+    state: present
+    apply: yes
+    definition: "{{ lookup('template', 'templates/newrelic-configmap.yml') }}"
+
 - name: Include the activemq tasks
   include: activemq.yml
 
