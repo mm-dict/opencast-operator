@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: activemq
-          image: quay.io/mm-dict/activemq-opencast:latest
+          image: {{ opencast.activemq.image | default("quay.io/mm-dict/activemq-opencast:latest") }}
           imagePullPolicy: Always
           ports:
             - containerPort: 61616
