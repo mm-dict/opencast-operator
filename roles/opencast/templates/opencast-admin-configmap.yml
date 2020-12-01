@@ -151,7 +151,7 @@ data:
 
     # Opencast comes with the jdbc drivers for MySQL (com.mysql.jdbc.Driver) and PostgreSQL (org.postgresql.Driver). To add
     # other jdbcDrivers to the Opencast runtime, rebuild the db module with your desired drivers.
-    org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
+    org.opencastproject.db.jdbc.driver=org.mariadb.jdbc.Driver
 
     # The jdbc connection url, username, and password
     org.opencastproject.db.jdbc.url={{ opencast.database.url }}
@@ -966,27 +966,27 @@ data:
     #
     featuresBoot = \
         (wrap), \
-        cxf-http-jetty/3.2.6, \
-        package/4.2.2, \
-        scr/4.2.2, \
-        cxf-commands/3.2.6, \
-        log/4.2.2, \
-        cxf-jaxrs/3.2.6, \
-        aries-blueprint/4.2.2, \
-        opencast-admin/8.0.0.SNAPSHOT, \
-        framework/4.2.2, \
-        system/4.2.2, \
-        feature/4.2.2, \
-        shell/4.2.2, \
-        eclipselink/2.7.3, \
-        service/4.2.2, \
-        jndi/4.2.2, \
-        http/4.2.2, \
-        jpa/2.7.0, \
-        deployer/4.2.2, \
-        http-whiteboard/4.2.2, \
-        bundle/4.2.2, \
-        config/4.2.2, \
+        cxf-http-jetty/3.3.3, \
+        package/4.2.9, \
+        scr/4.2.9, \
+        cxf-commands/3.3.3, \
+        log/4.2.9, \
+        cxf-jaxrs/3.3.3, \
+        aries-blueprint/4.2.9, \
+        framework/4.2.9, \
+        system/4.2.9, \
+        feature/4.2.9, \
+        shell/4.2.9, \
+        eclipselink/2.7.7, \
+        service/4.2.9, \
+        jndi/4.2.9, \
+        http/4.2.9, \
+        jpa/2.7.2, \
+        deployer/4.2.9, \
+        http-whiteboard/4.2.9, \
+        opencast-admin/9.0.0.SNAPSHOT, \
+        bundle/4.2.9, \
+        config/4.2.9, \
         transaction/2.0.0 \
         opencast-security-cas
 
