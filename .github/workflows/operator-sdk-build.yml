@@ -4,7 +4,7 @@ jobs:
   run-operator-sdk:
     runs-on: ubuntu-latest
     steps:
-      - uses: xunholy/operator-sdk-action
+      - uses: xunholy/operator-sdk-action@master
         with:
           image: "dictmm/opencast-operator"
           tag: latest
