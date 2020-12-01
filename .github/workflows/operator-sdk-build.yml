@@ -8,7 +8,7 @@ jobs:
         with:
           image: "dictmm/opencast-operator"
           tag: latest
-          dirPath: "/build/dockerfile"
+          dirPath: "build/dockerfile"
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
