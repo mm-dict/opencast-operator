@@ -199,7 +199,7 @@ data:
     # If this is undefined, Opencast will launch an internal Elasticsearch node.
     # Default: undefined
     {% if opencast.elasticsearch is defined %}
-    org.opencastproject.elasticsearch.server.address={{ opencast.elasticsearch.address }}
+    org.opencastproject.elasticsearch.server.hostname={{ opencast.elasticsearch.address }}
     org.opencastproject.elasticsearch.server.port={{ opencast.elasticsearch.port }}
     {% endif %}
     #org.opencastproject.elasticsearch.server.address=127.0.0.1
