@@ -1212,7 +1212,7 @@ data:
                     <configuration key="image-count">100</configuration>
                 </configurations>
             </operation>
-            <operation description="Encoding 720p video to MP4 download" exception-handler-workflow="partial-error" id="compose">
+            <operation description="Encoding 720p video to MP4 download" exception-handler-workflow="partial-error" id="encode">
                 <configurations>
                     <configuration key="source-flavor">*/work</configuration>
                     <configuration key="target-flavor">*/delivery</configuration>
