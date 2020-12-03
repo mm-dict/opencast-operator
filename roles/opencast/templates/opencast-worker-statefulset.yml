@@ -70,7 +70,7 @@ spec:
             - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
               value: "{{ opencast.database.user }}"
             - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
-              value: "com.mysql.cj.jdbc.Driver"
+              value: "org.mariadb.jdbc.Driver"
             - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
               valueFrom:
                 secretKeyRef:
