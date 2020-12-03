@@ -51,6 +51,8 @@ spec:
               value: "false"
             - name: xpack.monitoring.enabled
               value: "false"
+            - name: xpack.security.authc.anonymous.roles
+              value: "opencast"
             - name: bootstrap.memory_lock
               value: "true"
           volumeMounts:
