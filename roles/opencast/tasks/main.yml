@@ -72,6 +72,7 @@
     state: present
     apply: yes
     definition: "{{ lookup('template', 'templates/newrelic-configmap.yml') }}"
+  when: newrelic is defined
 
 - name: Include the activemq tasks
   include: activemq.yml

@@ -40,8 +40,10 @@ spec:
               value: "{{ opencast_admin.java.max_mem}}"
             - name: OPENCAST_DISABLE_CONFIG
               value: "true"
+            {% if newrelic is defined %}
             - name: JAVA_OPTS
               value: -javaagent:/opt/newrelic/newrelic.jar
+            {% endif %}
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data/opencast
@@ -106,11 +108,13 @@ spec:
               mountPath: {{ extra_ldap.configmap.mountpath }}
               subPath: {{ extra_ldap.configmap.subpath }}
             {% endif %}
+            {% if newrelic is defined %}
             - name: newrelic
               mountPath: /opt/newrelic
             - name: newrelic-config
               mountPath: /opt/newrelic/newrelic.yml
               subPath: newrelic.yml
+            {% endif %}
           resources:
             {% if opencast_admin.resources.requests is defined %}
             requests:
@@ -133,6 +137,7 @@ spec:
               - name: Host
                 value: localhost
       initContainers:
+      {% if newrelic is defined %}
       - name: install-newrelic
         image: alpine:latest
         command:
@@ -144,6 +149,7 @@ spec:
         volumeMounts:
         - mountPath: /opt/newrelic
           name: newrelic
+      {% endif %}
       volumes:
         - name: opencast-config
           configMap:
@@ -167,8 +173,10 @@ spec:
         {% endif %}
         - name: opencast-admin-data
           emptyDir: {}
+        {% if newrelic is defined %}
         - name: newrelic
           emptyDir: {}
         - name: newrelic-config
           configMap:
             name: {{ meta.name }}-newrelic-config
+        {% endif %}
