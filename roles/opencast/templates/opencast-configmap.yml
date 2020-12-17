@@ -84,7 +84,7 @@ data:
     # This can be useful with LMS's that use non-default sourcedid field.
     #
     # Default: no custom_username
-    lti.custom_username=ext_d2l_orgdefinedid
+    #lti.custom_username=ext_d2l_orgdefinedid
   org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg: |
     # OAuth consumer consisting of name, key and secret.
     #

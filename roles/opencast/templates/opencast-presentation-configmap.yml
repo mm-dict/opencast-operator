@@ -966,7 +966,7 @@ data:
     # Comma separated list of features repositories to register by default
     #
     featuresRepositories = \
-        mvn:org.opencastproject.assemblies/opencast-karaf-features/9-SNAPSHOT/xml/features, \
+        mvn:org.opencastproject.assemblies/opencast-karaf-features/9.0/xml/features, \
         mvn:org.apache.cxf.karaf/apache-cxf/3.3.3/xml/features, \
         mvn:org.apache.karaf.features/standard/4.2.9/xml/features, \
         mvn:org.apache.karaf.features/framework/4.2.9/xml/features, \
@@ -995,7 +995,7 @@ data:
         jpa/2.7.2, \
         deployer/4.2.9, \
         http-whiteboard/4.2.9, \
-        opencast-presentation/9.0.0.SNAPSHOT, \
+        opencast-presentation/9.0.0, \
         bundle/4.2.9, \
         config/4.2.9, \
         transaction/2.0.0 \
