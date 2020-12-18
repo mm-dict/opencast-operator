@@ -70,6 +70,9 @@ spec:
               mountPath: /opencast/etc/workflows/ugent-import.xml
               subPath: ugent-import.xml
             - name: opencast-config
+              mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
+              subPath: ugent-partial-ingest.xml
+            - name: opencast-config
               mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
               subPath: org.ops4j.pax.logging.cfg
             {% if opencast.lti is defined %}
