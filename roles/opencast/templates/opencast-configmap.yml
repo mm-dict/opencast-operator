@@ -1278,7 +1278,7 @@ data:
     <?xml version="1.0" encoding="UTF-8"?>
     <definition xmlns="http://workflow.opencastproject.org">
 
-      <id>partial-ingest</id>
+      <id>ugent-partial-ingest</id>
       <title>Ingest asset</title>
       <tags/>
       <description/>
