@@ -32,9 +32,9 @@ spec:
               protocol: TCP
           env:
             - name: ACTIVEMQ_MIN_MEMORY
-              value: {{ opencast.activemq.min_memory | default("128") }}
+              value: '{{ opencast.activemq.min_memory | default("128") }}'
             - name: ACTIVEMQ_MAX_MEMORY
-              value: {{ opencast.activemq.max_memory | default("1024") }}
+              value: '{{ opencast.activemq.max_memory | default("1024") }}'
             - name: ACTIVEMQ_ENABLED_SCHEDULER
               value: "true"
             - name: ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT
