@@ -32,9 +32,9 @@ spec:
               protocol: TCP
           env:
             - name: ACTIVEMQ_MIN_MEMORY
-              value: "128"
+              value: {{ opencast.activemq.min_memory | default("128") }}
             - name: ACTIVEMQ_MAX_MEMORY
-              value: "1024"
+              value: {{ opencast.activemq.max_memory | default("1024") }}
             - name: ACTIVEMQ_ENABLED_SCHEDULER
               value: "true"
             - name: ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT
@@ -54,11 +54,11 @@ spec:
               subPath: activemq.xml
           resources:
             requests:
-              memory: 512Mi
-              cpu: 500m
+              memory: {{ opencast.activemq.requests.memory | default("512Mi") }}
+              cpu: {{ opencast.activemq.requests.cpu | default("500m") }}
             limits:
-              memory: 2Gi
-              cpu: 1
+              memory: {{ opencast.activemq.limits.memory | default("2Gi") }}
+              cpu: {{ opencast.activemq.limits.cpu | default("2") }}
       volumes:
         - name: activemq-config
           configMap:
@@ -70,4 +70,4 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 50Mi
+          storage: {{ opencast.activemq.storage | default("50Mi") }}
