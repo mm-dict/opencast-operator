@@ -995,7 +995,7 @@ data:
         jpa/2.7.2, \
         deployer/4.2.9, \
         http-whiteboard/4.2.9, \
-        opencast-presentation/9.0.0, \
+        opencast-presentation/9.1.0, \
         bundle/4.2.9, \
         config/4.2.9, \
         transaction/2.0.0 \
