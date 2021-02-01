@@ -60,6 +60,9 @@ spec:
               mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
               subPath: paella-config.json
             - name: opencast-config
+              mountPath: /opencast/etc/ui-config/mh_default_org/ltitools/lti.css
+              subPath: lti.css
+            - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
               subPath: org.opencastproject.organization-mh_default_org.cfg
             - name: opencast-config
