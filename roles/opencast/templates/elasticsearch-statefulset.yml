@@ -67,17 +67,17 @@ spec:
               cpu: {{ opencast.elasticsearch.resources.limits.cpu | default('2') }}
       initContainers:
         - name: increase-vm-max-map
-          image: busybox
+          image: quay.io/mm-dict/busybox
           command: ["sysctl", "-w", "vm.max_map_count=262144"]
           securityContext:
             privileged: true
         - name: increase-fd-ulimit
-          image: busybox
+          image: quay.io/mm-dict/busybox
           command: ["sh", "-c", "ulimit -n 65536"]
           securityContext:
             privileged: true
         - name: increase-lockmem-ulimit
-          image: busybox
+          image: quay.io/mm-dict/busybox
           command: ["sh", "-c", "ulimit -l unlimited"]
           securityContext:
             privileged: true
