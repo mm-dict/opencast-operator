@@ -73,6 +73,9 @@ spec:
               mountPath: /opencast/etc/workflows/ugent-import.xml
               subPath: ugent-import.xml
             - name: opencast-config
+              mountPath: /opencast/etc/workflows/prepare-videoeditor.xml
+              subPath: prepare-videoeditor.xml
+            - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
               subPath: ugent-partial-ingest.xml
             - name: opencast-config
