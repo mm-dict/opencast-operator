@@ -1594,7 +1594,6 @@ data:
           <configurations>
             <configuration key="source-flavor">presenter/source</configuration>
             <configuration key="target-flavor">presenter/prepared</configuration>
-            <configuration key="target-tags">archive</configuration>
             <configuration key="rewrite">false</configuration>
             <configuration key="audio-muxing-source-flavors">*/?,*/*</configuration>
           </configurations>
@@ -1610,7 +1609,6 @@ data:
             <configuration key="source-flavor">presentation/source</configuration>
             <configuration key="target-flavor">presentation/prepared</configuration>
             <configuration key="rewrite">false</configuration>
-            <configuration key="target-tags">archive</configuration>
             <configuration key="audio-muxing-source-flavors">*/?,*/*</configuration>
           </configurations>
         </operation>
@@ -1636,7 +1634,7 @@ data:
             <configuration key="source-flavor-upper">presenter/prepared</configuration>
             <configuration key="encoding-profile">mp4-preview.dual.http</configuration>
             <configuration key="target-flavor">composite/preview</configuration>
-            <configuration key="target-tags">preview</configuration>
+            <configuration key="target-tags">preview, archive</configuration>
             <configuration key="output-resolution">1280x400</configuration>
             <configuration key="output-background">0x000000FF</configuration>
             <configuration key="layout">preview</configuration>
