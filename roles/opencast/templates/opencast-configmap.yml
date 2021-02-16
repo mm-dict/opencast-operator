@@ -1577,14 +1577,15 @@ data:
           </configurations>
         </operation>
 
-        <!-- Tag the results for internal publishing -->
         <operation
-          id="clone"
-          description="Tag composite from galicaster for use in editor">
-          <configurations>
-            <configuration key="source-flavor">composition/source</configuration>
+          id="tag"
+          description="Tag composite for use in videoeditor">
+          <configuration>
+            <configuration key="source-flavors">composition/source</configuration>
+            <configuration key="target-tags">+preview</configuration>
             <configuration key="target-flavor">composite/preview</configuration>
-          </configurations>
+            <configuration key="copy">true</configuration>
+          </configuration>
         </operation>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
