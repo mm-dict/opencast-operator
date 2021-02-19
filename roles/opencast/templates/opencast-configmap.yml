@@ -1577,15 +1577,61 @@ data:
           </configurations>
         </operation>
 
+        <!-- Prepare presenter track -->
+
+        <operation
+            id="prepare-av"
+            exception-handler-workflow="partial-error"
+            description="Preparing presenter (camera) audio and video work versions">
+          <configurations>
+            <configuration key="source-flavor">presenter/source</configuration>
+            <configuration key="target-flavor">presenter/prepared</configuration>
+            <configuration key="target-tags">archive</configuration>
+            <configuration key="rewrite">false</configuration>
+            <configuration key="audio-muxing-source-flavors">*/?,*/*</configuration>
+          </configurations>
+        </operation>
+
+        <!-- Prepare presentation track -->
+
+        <operation
+            id="prepare-av"
+            exception-handler-workflow="partial-error"
+            description="Preparing presentation (screen) audio and video work version">
+          <configurations>
+            <configuration key="source-flavor">presentation/source</configuration>
+            <configuration key="target-flavor">presentation/prepared</configuration>
+            <configuration key="rewrite">false</configuration>
+            <configuration key="target-tags">archive</configuration>
+            <configuration key="audio-muxing-source-flavors">*/?,*/*</configuration>
+          </configurations>
+        </operation>
+
+        <operation
+          id="analyze-tracks"
+          exception-handler-workflow="partial-error"
+          description="Analyze tracks in media package and set control variables">
+          <configurations>
+            <configuration key="source-flavor">*/source</configuration>
+          </configurations>
+        </operation>
+
+        <operation
+          id="clone"
+          description="Clones the composite for use in the videoeditor">
+          <configurations>
+            <configuration key="source-flavor">composition/source</configuration>
+            <configuration key="target-flavor">composite/preview</configuration>
+          </configurations>
+        </operation>
+
         <operation
           id="tag"
           description="Tag composite for use in videoeditor">
-          <configuration>
-            <configuration key="source-flavors">composition/source</configuration>
-            <configuration key="target-tags">+preview</configuration>
-            <configuration key="target-flavor">composite/preview</configuration>
-            <configuration key="copy">true</configuration>
-          </configuration>
+          <configurations>
+            <configuration key="source-flavors">composite/preview</configuration>
+            <configuration key="target-tags">preview</configuration>
+          </configurations>
         </operation>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -1593,6 +1639,20 @@ data:
         <!--                                                                   -->
         <!-- Create the waveform.                                              -->
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <operation
+          id="image"
+          description="Create video preview images for presenter and presentation"
+          exception-handler-workflow="partial-error">
+          <configurations>
+            <configuration key="source-flavors">presentation/source,presenter/source</configuration>
+            <configuration key="target-flavor">*/video+preview</configuration>
+            <configuration key="target-tags">preview</configuration>
+            <configuration key="encoding-profile">editor.tracks.preview</configuration>
+            <configuration key="time">50%</configuration>
+          </configurations>
+        </operation>
+
 
         <operation
           id="waveform"
@@ -1605,6 +1665,17 @@ data:
           </configurations>
         </operation>
 
+        <operation id="image"
+               exception-handler-workflow="partial-error"
+               description="Extract default thumbnail preview image from presenter track">
+          <configurations>
+            <configuration key="source-flavor">presenter/source</configuration>
+            <configuration key="target-flavor">thumbnail/preview</configuration>
+            <configuration key="target-tags">preview</configuration>
+            <configuration key="encoding-profile">editor.thumbnail.preview</configuration>
+            <configuration key="time">${thumbnailPosition}</configuration>
+          </configurations>
+        </operation>
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
         <!-- Silence detection                                                 -->
         <!--                                                                   -->
