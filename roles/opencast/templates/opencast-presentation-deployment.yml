@@ -40,6 +40,10 @@ spec:
               value: "{{ opencast_presentation.java.max_mem}}"
             - name: OPENCAST_DISABLE_CONFIG
               value: "true"
+            {% if newrelic is defined %}
+            - name: JAVA_OPTS
+              value: -javaagent:/opt/newrelic/newrelic.jar
+            {% endif %}
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data/opencast
@@ -110,6 +114,13 @@ spec:
               mountPath: {{ extra_ldap.configmap.mountpath }}
               subPath: {{ extra_ldap.configmap.subpath }}
             {% endif %}
+            {% if newrelic is defined %}
+            - name: newrelic
+              mountPath: /opt/newrelic
+            - name: newrelic-config
+              mountPath: /opt/newrelic/newrelic.yml
+              subPath: newrelic.yml
+            {% endif %}
           resources:
             {% if opencast_presentation.resources.requests is defined %}
             requests:
@@ -141,6 +152,20 @@ spec:
               httpHeaders:
               - name: Host
                 value: localhost
+      initContainers:
+      {% if newrelic is defined %}
+      - name: install-newrelic
+        image: quay.io/mm-dict/alpine:latest
+        command:
+        - /usr/bin/wget
+        args:
+        - -P
+        - /opt/newrelic
+        - https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic.jar
+        volumeMounts:
+        - mountPath: /opt/newrelic
+          name: newrelic
+      {% endif %}
       volumes:
         - name: opencast-presentation-config
           configMap:
@@ -164,3 +189,11 @@ spec:
           configMap:
             name: {{ extra_ldap.name }}
         {% endif %}
+        {% if newrelic is defined %}
+        - name: newrelic
+          emptyDir: {}
+        - name: newrelic-config
+          configMap:
+            name: {{ meta.name }}-newrelic-config
+        {% endif %}
+
