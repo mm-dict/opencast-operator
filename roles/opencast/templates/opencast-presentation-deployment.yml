@@ -68,6 +68,9 @@ spec:
               mountPath: /opencast/bin/setenv
               subPath: setenv
             - name: opencast-presentation-config
+              mountPath: /opencast/etc/org.ops4j.pax.web.cfg
+              subPath: org.ops4j.pax.web.cfg
+            - name: opencast-presentation-config
               mountPath: /opencast/etc/jetty-opencast.xml
               subPath: jetty-opencast.xml
             - name: opencast-presentation-data
