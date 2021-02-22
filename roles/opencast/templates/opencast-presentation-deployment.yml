@@ -10,6 +10,8 @@ metadata:
     type: presentation
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       type: presentation
@@ -65,6 +67,9 @@ spec:
             - name: opencast-presentation-config
               mountPath: /opencast/bin/setenv
               subPath: setenv
+            - name: opencast-presentation-config
+              mountPath: /opencast/etc/jetty-opencast.xml
+              subPath: jetty-opencast.xml
             - name: opencast-presentation-data
               mountPath: /opencast/data
             - name: opencast-config
