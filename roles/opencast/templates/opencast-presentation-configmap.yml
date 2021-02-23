@@ -874,12 +874,12 @@ data:
       </bean>
       <bean id="casEntryPoint"
         class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
-        <property name="loginUrl" value="{{ opencast_presentation.cas_filter.login_url }}"/>
+        <property name="loginUrl" value="{{ opencast_presentation.cas_filter.login_url | default('') }}"/>
         <property name="serviceProperties" ref="serviceProperties"/>
       </bean>
       <bean id="serviceProperties"
         class="org.springframework.security.cas.ServiceProperties">
-        <property name="service" value="{{ opencast_presentation.cas_filter.service }}"/>
+        <property name="service" value="{{ opencast_presentation.cas_filter.service | default('') }}"/>
         <property name="sendRenew" value="false"/>
       </bean>
       <bean id="casAuthenticationProvider"
@@ -892,7 +892,7 @@ data:
         </property>
         <property name="ticketValidator">
           <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
-            <constructor-arg index="0" value="{{ opencast_presentation.cas_filter.ticket_validator }}" />
+            <constructor-arg index="0" value="{{ opencast_presentation.cas_filter.ticket_validator | default('') }}" />
           </bean>
         </property>
         <property name="key" value="opencastprd"/>
@@ -901,11 +901,11 @@ data:
       <bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
       <!-- This filter redirects to the CAS Server to signal Single Logout should be performed -->
       <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <constructor-arg value="{{ opencast_presentation.cas_filter.logout_url }}"/>
+        <constructor-arg value="{{ opencast_presentation.cas_filter.logout_url | default('') }}"/>
         <constructor-arg>
           <bean class= "org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
         </constructor-arg>
-        <property name="filterProcessesUrl" value="{{ opencast_presentation.cas_filter.logout_filter_url }}"/>
+        <property name="filterProcessesUrl" value="{{ opencast_presentation.cas_filter.logout_filter_url | default('') }}"/>
       </bean>
       <!-- #################### -->
       <!-- # OSGI Integration # -->
@@ -1111,20 +1111,10 @@ data:
     <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
 
     <Configure id="Server" class="org.eclipse.jetty.server.Server">
-
-      <Set name="ThreadPool">
-      <New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
-        <!-- specify a bounded queue -->
-        <Arg>
-           <New class="java.util.concurrent.ArrayBlockingQueue">
-              <Arg type="int">6000</Arg>
-           </New>
-      </Arg>
+      <Get name="ThreadPool">
         <Set name="minThreads">10</Set>
-        <Set name="maxThreads">400</Set>
-        <Set name="detailedDump">false</Set>
-      </New>
-    </Set>
+        <Set name="maxThreads">500</Set>
+      </Get>
 
       <!-- =========================================================== -->
       <!-- Set connectors -->
@@ -1147,29 +1137,7 @@ data:
         <Set name="headerCacheSize">512</Set>
       </New>
 
-      <Call name="addConnector">
-        <Arg>
-          <New id="httpConnector" class="org.eclipse.jetty.server.ServerConnector">
-            <Arg name="server"><Ref refid="Server" /></Arg>
-            <Arg name="acceptors" type="int"><Property name="jetty.http.acceptors" deprecated="http.acceptors" default="-1"/></Arg>
-            <Arg name="selectors" type="int"><Property name="jetty.http.selectors" deprecated="http.selectors" default="-1"/></Arg>
-            <Arg name="factories">
-              <Array type="org.eclipse.jetty.server.ConnectionFactory">
-                <Item>
-                  <New class="org.eclipse.jetty.server.HttpConnectionFactory">
-                    <Arg name="config"><Ref refid="httpConfig" /></Arg>
-                  </New>
-                </Item>
-              </Array>
-            </Arg>
-            <Set name="name">default</Set>
-            <!-- Adjust the host and port settings to match the configuration in org.ops4j.pax.web.cfg -->
-            <Set name="host">127.0.0.1</Set>
-            <Set name="idleTimeout">600000</Set>
-            <Set name="port">8080</Set>
-          </New>
-        </Arg>
-      </Call>
+
 
       <!-- =========================================================== -->
       <!-- Configure Authentication Realms -->
