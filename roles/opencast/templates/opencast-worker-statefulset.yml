@@ -131,15 +131,20 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
               subPath: ugent-partial-ingest.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
-              subPath: org.ops4j.pax.logging.cfg
+            {% if opencast.encodingdir.shared %}
+            - name: opencast-encoding-dir
+              mountPath: /opencast/etc/encoding/
+            {% else %}
             - name: opencast-config
               mountPath: /opencast/etc/encoding/ugent-adaptive-streaming-movies.properties
               subPath: ugent-adaptive-streaming-movies.properties
             - name: opencast-config
               mountPath: /opencast/etc/encoding/adaptive-streaming-movies.properties
               subPath: adaptive-streaming-movies.properties
+            {% endif %}
+            - name: opencast-config
+              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
+              subPath: org.ops4j.pax.logging.cfg
             {% if extra_ldap is defined%}
             - name: {{ extra_ldap.name }}
               mountPath: {{ extra_ldap.configmap.mountpath }}
@@ -152,6 +157,11 @@ spec:
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
             {% endif %}
       volumes:
+        {% if opencast.encodingdir.shared is defined %}
+        - name: opencast-encoding-dir
+          persistentVolumeClaim:
+            claimName: '{{ meta.name }}-opencast-encoding-dir'
+        {% endif %}
         {% if createpv is defined %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:

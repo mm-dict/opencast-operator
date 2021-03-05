@@ -42,6 +42,23 @@
           requests:
             storage: '{{ opencast_admin.pvsize }}'
 
+- name: Create the PV holding the workflows (when defined)
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        namespace: '{{ meta.namespace }}'
+        name: '{{ meta.name }}-opencast-workflow-dir'
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: '25Mi'
+  when: opencast.workflowdir.shared is defined
+
 - name: Create the opencast-admin configmap
   k8s:
     state: present

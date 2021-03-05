@@ -70,6 +70,10 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
               subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
+            {% if opencast.workflowdir.shared is defined %}
+            - name: opencast-workflow-dir
+              mountPath: /opencast/etc/workflows
+            {% else %}
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
               subPath: ugent-schedule-and-upload.xml
@@ -85,6 +89,7 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/prepare-videoeditor.xml
               subPath: prepare-videoeditor.xml
+            {% endif %}
             - name: opencast-config
               mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
               subPath: org.ops4j.pax.logging.cfg
@@ -190,4 +195,9 @@ spec:
         - name: newrelic-config
           configMap:
             name: {{ meta.name }}-newrelic-config
+        {% endif %}
+        {% if opencast.workflowdir.shared is defined %}
+        - name: opencast-workflow-dir
+          persistentVolumeClaim:
+            claimName: {{ meta.name }}-opencast-workflow-dir
         {% endif %}
