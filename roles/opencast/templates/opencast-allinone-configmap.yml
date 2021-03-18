@@ -1584,7 +1584,7 @@ data:
     featuresRepositories = \
         mvn:org.apache.karaf.features/enterprise/4.2.2/xml/features, \
         mvn:org.apache.cxf.karaf/apache-cxf/3.2.6/xml/features, \
-        mvn:org.opencastproject.assemblies/opencast-karaf-features/8-SNAPSHOT/xml/features, \
+        mvn:org.opencastproject.assemblies/opencast-karaf-features/9.3/xml/features, \
         mvn:org.apache.karaf.features/standard/4.2.2/xml/features, \
         mvn:org.apache.karaf.features/framework/4.2.2/xml/features
 
@@ -1611,7 +1611,7 @@ data:
         jpa/2.7.2, \
         deployer/4.2.9, \
         http-whiteboard/4.2.9, \
-        opencast-admin/9.0.0.SNAPSHOT, \
+        opencast-admin/9.3, \
         bundle/4.2.9, \
         config/4.2.9, \
         transaction/2.0.0 \
