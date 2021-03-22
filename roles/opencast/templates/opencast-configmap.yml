@@ -561,6 +561,15 @@ data:
     #             replace the event specific permissions if they want to.
     # Default: optional
     #prop.admin.series.acl.event.update.mode=optional
+
+    # The location of the video editor linked in the admin interface
+    #
+    # Format: A URL or path
+    # Common values:
+    #   The internal editor: #!/events/events/$id/tools/editor
+    #   The external editing tool: /editor-ui/index.html?mediaPackageId=$id
+    # Default: #!/events/events/$id/tools/editor
+    prop.admin.editor.url=/editor-ui/index.html?mediaPackageId=$id
   paella-config.json: |
     {
       "player": {
