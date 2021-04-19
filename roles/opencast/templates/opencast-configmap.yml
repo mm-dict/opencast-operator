@@ -1206,7 +1206,7 @@ data:
                     <configuration key="target-tags">-engage-download</configuration>
                 </configurations>
             </operation>
-            <operation description="Creating player preview image" exception-handler-workflow="partial-error" id="image">
+            <operation description="Creating player preview image" exception-handler-workflow="partial-error" fail-on-error="false" id="image">
                 <configurations>
                     <configuration key="source-flavor">presenter/work</configuration>
                     <configuration key="source-tags"/>
@@ -1215,7 +1215,7 @@ data:
                     <configuration key="time">1</configuration>
                 </configurations>
             </operation>
-            <operation description="Create a cover image" exception-handler-workflow="partial-error" fail-on-error="true" id="cover-image">
+            <operation description="Create a cover image" exception-handler-workflow="partial-error" fail-on-error="false" id="cover-image">
                 <configurations>
                     <configuration key="stylesheet">file://${karaf.etc}/branding/coverimage.xsl</configuration>
                     <configuration key="width">1920</configuration>
@@ -1289,6 +1289,22 @@ data:
                     <configuration key="check-availability">true</configuration>
                     <configuration key="repository">default</configuration>
                 </configurations>
+            </operation>
+
+             <!-- Publish preview internal -->
+
+            <operation
+              id="publish-configure"
+              exception-handler-workflow="partial-error"
+              description="Publish to preview publication channel">
+              <configurations>
+                <configuration key="download-source-tags">engage-download,atom,rss</configuration>
+                <configuration key="streaming-source-tags">engage-streaming</configuration>
+                <configuration key="channel-id">internal</configuration>
+                <configuration key="url-pattern">http://localhost:8080/admin-ng/index.html#/events/events/${event_id}/tools/playback</configuration>
+                <configuration key="check-availability">true</configuration>
+                <configuration key="mode">mixed</configuration>
+              </configurations>
             </operation>
         </operations>
         <roles>

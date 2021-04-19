@@ -57,7 +57,7 @@
         resources:
           requests:
             storage: '25Mi'
-  when: opencast.workflowdir.shared is defined
+  when: opencast.workflowdir_shared is defined
 
 - name: Create the opencast-admin configmap
   k8s:

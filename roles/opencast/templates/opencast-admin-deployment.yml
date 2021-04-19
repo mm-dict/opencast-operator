@@ -70,7 +70,7 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
               subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-            {% if opencast.workflowdir.shared is defined %}
+            {% if opencast.workflowdir_shared is defined %}
             - name: opencast-workflow-dir
               mountPath: /opencast/etc/workflows
             {% else %}
@@ -196,7 +196,7 @@ spec:
           configMap:
             name: {{ meta.name }}-newrelic-config
         {% endif %}
-        {% if opencast.workflowdir.shared is defined %}
+        {% if opencast.workflowdir_shared is defined %}
         - name: opencast-workflow-dir
           persistentVolumeClaim:
             claimName: {{ meta.name }}-opencast-workflow-dir
