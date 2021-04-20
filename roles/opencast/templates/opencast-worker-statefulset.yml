@@ -131,7 +131,7 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
               subPath: ugent-partial-ingest.xml
-            {% if opencast.encodingdir_shared %}
+            {% if opencast.encodingdir_shared is True%}
             - name: opencast-encoding-dir
               mountPath: /opencast/etc/encoding/
             {% else %}
@@ -157,7 +157,7 @@ spec:
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
             {% endif %}
       volumes:
-        {% if opencast.encodingdir_shared is defined %}
+        {% if opencast.encodingdir_shared is True %}
         - name: opencast-encoding-dir
           persistentVolumeClaim:
             claimName: '{{ meta.name }}-opencast-encoding-dir'
