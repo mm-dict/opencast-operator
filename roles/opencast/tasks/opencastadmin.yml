@@ -56,7 +56,7 @@
           - ReadWriteMany
         resources:
           requests:
-            storage: '25Mi'
+            storage: '50Mi'
   when: opencast.workflowdir_shared
 
 - name: Create the opencast-admin configmap

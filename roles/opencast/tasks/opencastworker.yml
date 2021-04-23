@@ -41,7 +41,7 @@
           - ReadWriteMany
         resources:
           requests:
-            storage: '25Mi'
+            storage: '50Mi'
   when: opencast.encodingdir_shared
 
 - name: Create the opencast-presentation configmap
