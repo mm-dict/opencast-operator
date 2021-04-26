@@ -384,14 +384,23 @@ data:
     # http://docs.opencast.org/latest/admin/configuration/stream-security/#configuration-of-url-signing-timeout-values
     #org.opencastproject.security.internal.url.signing.duration=60
   mh_default_org.xml: |
-    <beans xmlns="http://www.springframework.org/schema/beans" xmlns:sec="http://www.springframework.org/schema/security"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
-      xsi:schemaLocation="http://www.springframework.org/schema/beans
+    <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-3.1.xsd
            http://www.springframework.org/schema/osgi
            http://www.springframework.org/schema/osgi/spring-osgi.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+      <!-- ######################################## -->
+      <!-- # Open and unsecured url patterns      # -->
+      <!-- ######################################## -->
 
       <sec:http pattern="/favicon.ico" security="none" />
 
@@ -417,6 +426,9 @@ data:
 
         <!-- Allow anonymous access to the player redirect -->
         <sec:intercept-url pattern="/play/*" access="ROLE_ANONYMOUS" />
+
+        <!-- Define roles for metrics endpoint -->
+        <sec:intercept-url pattern="/metrics" access="ROLE_ADMIN, ROLE_METRICS" />
 
         <!-- Protect admin UI facade -->
         <sec:intercept-url pattern="/workflow/definitions.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_CREATE" />
@@ -606,7 +618,7 @@ data:
         <sec:intercept-url pattern="/api/events/*" method="POST" access="ROLE_ADMIN, ROLE_API_EVENTS_EDIT"/>
         <sec:intercept-url pattern="/api/events/*/acl/*" method="POST" access="ROLE_ADMIN, ROLE_API_EVENTS_ACL_EDIT"/>
         <sec:intercept-url pattern="/api/groups" method="POST" access="ROLE_ADMIN, ROLE_API_GROUPS_CREATE"/>
-        <sec:intercept-url pattern="/api/groups/*/members/*" method="POST" access="ROLE_ADMIN, ROLE_API_GROUPS_EDIT"/>
+        <sec:intercept-url pattern="/api/groups/*/members" method="POST" access="ROLE_ADMIN, ROLE_API_GROUPS_EDIT"/>
         <sec:intercept-url pattern="/api/clearIndex" method="POST" access="ROLE_ADMIN"/>
         <sec:intercept-url pattern="/api/recreateIndex" method="POST" access="ROLE_ADMIN"/>
         <sec:intercept-url pattern="/api/recreateIndex/*" method="POST" access="ROLE_ADMIN"/>
@@ -637,7 +649,7 @@ data:
         <sec:intercept-url pattern="/admin-ng/shared/**" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/admin-ng/styles/**" access="ROLE_ANONYMOUS" />
 
-        <!-- Enable anonymous access to the /info/me.json resource -->
+        <!-- Enable anonymous access to the /info/** resource -->
         <sec:intercept-url pattern="/info/**" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/i18n/languages.json" method="GET" access="ROLE_ANONYMOUS" />
 
@@ -666,6 +678,9 @@ data:
         <sec:intercept-url pattern="/studio/manifest.json" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/studio/static/js/**" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/studio/**" access="ROLE_ADMIN, ROLE_STUDIO" />
+
+        <!-- Enable access to Opencast Editor -->
+        <sec:intercept-url pattern="/editor-ui/**" access="ROLE_ADMIN" />
 
         <!-- Enable anonymous access to the annotation and the series endpoints -->
         <sec:intercept-url pattern="/series/**" method="GET" access="ROLE_ANONYMOUS, ROLE_CAPTURE_AGENT" />
@@ -707,17 +722,16 @@ data:
 
         <!-- Enable access to the LTI service -->
         <sec:intercept-url pattern="/lti-service-gui/**" access="ROLE_OAUTH_USER" />
-        <sec:intercept-url pattern="/lti-service/**" access="ROLE_OAUTH_USER" />
 
         <sec:intercept-url pattern="/transcripts/watson/results*" method="GET" access="ROLE_ANONYMOUS" />
         <sec:intercept-url pattern="/transcripts/watson/results*" method="POST" access="ROLE_ANONYMOUS" />
 
         <!-- Everything else is for the admin users -->
-        <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
-        <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
-        <sec:intercept-url pattern="/admin-ng/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
-        <sec:intercept-url pattern="/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
-        <sec:intercept-url pattern="/**" access="ROLE_ADMIN, ROLE_COURSE_ADMIN" />
+        <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+        <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+        <sec:intercept-url pattern="/admin-ng/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+        <sec:intercept-url pattern="/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+        <sec:intercept-url pattern="/**" access="ROLE_ADMIN" />
 
         <!-- ############################# -->
         <!-- # LOGIN / LOGOUT MECHANISMS # -->
@@ -730,25 +744,56 @@ data:
         <!-- <sec:form-login authentication-failure-url="/admin-ng/login.html?error" authentication-success-handler-ref="authSuccessHandler" /> -->
 
         <!-- Authentication filter chain -->
-        <!-- CAS auth is used for authentication via browsers -->
-        <sec:custom-filter position="FORM_LOGIN_FILTER" ref="casFilter" />
         <sec:custom-filter position="BASIC_AUTH_FILTER" ref="authenticationFilters" />
 
         <sec:custom-filter ref="asyncTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
+
         <!-- Opencast is shipping its own implementation of the anonymous filter -->
         <sec:custom-filter ref="anonymousFilter" position="ANONYMOUS_FILTER" />
 
+        <sec:custom-filter position="FORM_LOGIN_FILTER" ref="casFilter" />
+
         <!-- Enables "remember me" functionality -->
-        <sec:remember-me key="opencast" user-service-ref="userDetailsService" />
+        <sec:remember-me services-ref="rememberMeServices" />
+
         <!-- Set the request cache -->
         <sec:request-cache ref="requestCache" />
+
         <!-- If any URLs are to be exposed to anonymous users, the "sec:anonymous" filter must be present -->
         <sec:anonymous enabled="false" />
-        <!-- Enables CAS Single Sign Out -->
+
+        <!-- CAS Auth:  Uncomment this if using CAS authentication  -->
+        <!-- Enables CAS Single Sign Out
         <sec:logout logout-success-url="/cas-logout.jsp"/>
         <sec:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
         <sec:custom-filter ref="singleLogoutFilter" before="FORM_LOGIN_FILTER"/>
+
+        <!-- Enables log out -->
+        <sec:logout success-handler-ref="logoutSuccessHandler" />
+
+        <!-- Shibboleth log out
+         Please specifiy the URL to return to after logging out
+        <sec:logout logout-success-url="/Shibboleth.sso/Logout?return=http://www.opencast.org" />
+        -->
+
       </sec:http>
+
+      <bean id="rememberMeServices" class="org.opencastproject.kernel.security.SystemTokenBasedRememberMeService">
+            <property name="userDetailsService" ref="userDetailsService"/>
+            <!-- All following settings are optional -->
+            <property name="tokenValiditySeconds" value="1209600"/>
+            <property name="cookieName" value="oc-remember-me"/>
+            <!-- The following key will be augmented by system properties. Thus, leaving this untouched is okay -->
+            <!-- This key must be equal to the key passed to rememberMeAuthenticationProvider (s. below) -->
+            <property name="key" value="opencast"/>
+      </bean>
+
+      <bean id="rememberMeAuthenticationProvider"
+        class="org.opencastproject.kernel.security.SystemTokenBasedRememberMeAuthenticationProvider">
+            <!-- This key must be equal to the key passed to rememberMeServices (s. above) -->
+            <property name="key" value="opencast"/>
+      </bean>
+
       <!-- ############################# -->
       <!-- # Authentication Filters    # -->
       <!-- ############################# -->
@@ -816,6 +861,10 @@ data:
             <!-- Any role not listed explicitly will redirect here -->
           </map>
         </property>
+      </bean>
+
+      <bean id="logoutSuccessHandler" class="org.opencastproject.kernel.security.LogoutSuccessHandler">
+            <property name="userDirectoryService" ref="userDirectoryService" />
       </bean>
 
       <!-- ################# -->
