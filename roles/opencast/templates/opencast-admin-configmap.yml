@@ -763,7 +763,7 @@ data:
         <sec:anonymous enabled="false" />
 
         <!-- CAS Auth:  Uncomment this if using CAS authentication  -->
-        <!-- Enables CAS Single Sign Out
+        <!-- Enables CAS Single Sign Out -->
         <sec:logout logout-success-url="/cas-logout.jsp"/>
         <sec:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
         <sec:custom-filter ref="singleLogoutFilter" before="FORM_LOGIN_FILTER"/>
