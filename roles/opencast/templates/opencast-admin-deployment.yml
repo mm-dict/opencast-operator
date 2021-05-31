@@ -70,6 +70,9 @@ spec:
             - name: opencast-config
               mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
               subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
+            - name: opencast-config
+              mountPath: /opencast/etc/listproviders/languages.properties
+              subPath: languages.properties
             {% if opencast.workflowdir_shared %}
             - name: opencast-workflow-dir
               mountPath: /opencast/etc/workflows
