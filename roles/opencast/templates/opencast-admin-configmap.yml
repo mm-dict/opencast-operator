@@ -1018,7 +1018,7 @@ data:
         mvn:org.apache.karaf.features/standard/4.2.9/xml/features, \
         mvn:org.apache.karaf.features/framework/4.2.9/xml/features, \
         mvn:org.apache.karaf.features/enterprise/4.2.9/xml/features, \
-        mvn:org.opencastproject.assemblies/opencast-karaf-features/9.5/xml/features
+        mvn:org.opencastproject.assemblies/opencast-karaf-features/9.6/xml/features
 
     #
     # Comma separated list of features to install at startup
@@ -1043,7 +1043,7 @@ data:
         jpa/2.7.2, \
         deployer/4.2.9, \
         http-whiteboard/4.2.9, \
-        opencast-admin/9.5.0, \
+        opencast-admin/9.6.0, \
         bundle/4.2.9, \
         config/4.2.9, \
         transaction/2.0.0 \
