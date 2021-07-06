@@ -44,7 +44,7 @@ spec:
               name: web
           env:
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
-              value: "MySQL"
+              value: "MariaDB"
             - name: JAVA_MIN_MEM
               value: "{{ opencast_worker.java.min_mem}}"
             - name: JAVA_MAX_MEM

@@ -28,7 +28,7 @@ spec:
             - containerPort: 8080
           env:
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
-              value: "MySQL"
+              value: "MariaDB"
             - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
               value: "{{ opencast.database.url }}"
             - name: ORG_OPENCASTPROJECT_DB_JDBC_USER

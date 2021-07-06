@@ -41,7 +41,7 @@ spec:
             - name: ORG_OPENCASTPROJECT_SERVER_URL
               value: "{{ opencast_ingest.server.url }}"
             - name: ORG_OPENCASTPROJECT_DB_VENDOR
-              value: "MySQL"
+              value: "MariaDB"
             - name: JAVA_MIN_MEM
               value: "{{ opencast_ingest.java.min_mem }}"
             - name: JAVA_MAX_MEM
