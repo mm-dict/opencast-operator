@@ -40,8 +40,66 @@ spec:
               value: "{{ opencast_admin.java.min_mem}}"
             - name: JAVA_MAX_MEM
               value: "{{ opencast_admin.java.max_mem}}"
-            - name: OPENCAST_DISABLE_CONFIG
-              value: "true"
+                        - name: ORG_OPENCASTPROJECT_DB_VENDOR
+              value: "MySQL"
+            - name: ORG_OPENCASTPROJECT_SERVER_URL
+              value: ""
+            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_USER
+              value: "admin"
+            - name: ORG_OPENCASTPROJECT_SECURITY_ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast'
+                  key: admin-pass
+            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_USER
+              value: "opencast_system_account"
+            - name: ORG_OPENCASTPROJECT_SECURITY_DIGEST_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast'
+                  key: digest-pass
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_URL
+              value: "{{ opencast.database.url }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_USER
+              value: "{{ opencast.database.user }}"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_DRIVER
+              value: "org.mariadb.jdbc.Driver"
+            - name: ORG_OPENCASTPROJECT_DB_JDBC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-database'
+                  key: database-password
+            - name: ORG_OPENCASTPROJECT_STREAMING_URL
+              value: {{ opencast.streaming.url }}
+            - name: ORG_OPENCASTPROJECT_ADAPTIVE_STREAMING_URL
+              value: {{ opencast.adaptive_streaming.url }}
+            - name: ACTIVEMQ_BROKER_URL
+              value: "{{ opencast.activemq.url }}"
+            - name: ACTIVEMQ_BROKER_USERNAME
+              value: "{{ opencast.activemq.user}}"
+            - name: ACTIVEMQ_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: '{{ meta.name }}-opencast-activemq'
+                  key: activemq-password
+            - name: PROP_ORG_OPENCASTPROJECT_PLAYER
+              value: "{{ opencast.player | default('/paella/ui/watch.html?id=#{id}') }}"
+            - name: PROP_ORG_OPENCASTPROJECT_ADMIN_UI_URL
+              value: "{{ opencast.admin.ui.url }}"
+            - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
+              value: "{{ opencast.engage.ui.url }}"
+            - name: SOLR_SEARCH_URL
+              value: "{{ opencast.solr_search.url }}"
+            - name: SOLR_SERIES_URL
+              value: "{{ opencast.solr_series.url }}"
+            - name: SOLR_WORKFLOW_URL
+              value: "{{ opencast.solr_workflow.url }}"
+            - name: ELASTICSEARCH_SERVER_ADDRESS
+              value: "{{ opencast.elasticsearch.address }}"
+            - name: ELASTICSEARCH_SERVER_PORT
+              value: "9200"
+            - name: OPENCAST_CUSTOM_CONFIG
+              value: "/opencast-custom"
             {% if newrelic is defined %}
             - name: JAVA_OPTS
               value: -javaagent:/opt/newrelic/newrelic.jar
@@ -52,81 +110,12 @@ spec:
               {% if storage.subpath is defined %}
               subPath: {{ storage.subpath }}
               {% endif %}
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/custom.properties
-              subPath: custom.properties
+            - name: opencast-config
+              mountPath: /opencast-custom
+              subPath: admin
             - name: opencast-admin-config
               mountPath: /opencast/bin/setenv
               subPath: setenv
-            - name: opencast-config
-              mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
-              subPath: paella-config.json
-            - name: opencast-config
-              mountPath: /opencast/etc/ui-config/mh_default_org/ltitools/lti.css
-              subPath: lti.css
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
-              subPath: org.opencastproject.organization-mh_default_org.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-              subPath: org.opencastproject.distribution.streaming.wowza.WowzaAdaptiveStreamingDistributionService.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/listproviders/languages.properties
-              subPath: languages.properties
-            {% if opencast.workflowdir_shared %}
-            - name: opencast-workflow-dir
-              mountPath: /opencast/etc/workflows
-            {% else %}
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
-              subPath: ugent-schedule-and-upload.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
-              subPath: ugent-partial-publish.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
-              subPath: ugent-partial-ingest.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-import.xml
-              subPath: ugent-import.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/prepare-videoeditor.xml
-              subPath: prepare-videoeditor.xml
-            {% endif %}
-            - name: opencast-config
-              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
-              subPath: org.ops4j.pax.logging.cfg
-            - name: opencast-admin-data
-              mountPath: /opencast/data
-            {% if opencast.lti is defined %}
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg
-              subPath: org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-              subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.lti.service.impl.LtiServiceImpl.cfg
-              subPath: org.opencastproject.lti.service.impl.LtiServiceImpl.cfg
-            {% endif %}
-            {% if opencast_admin.cas_filter is defined %}
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/security/mh_default_org.xml
-              subPath: mh_default_org.xml
-            - name: opencast-admin-config
-              mountPath: /opencast/etc/org.apache.karaf.features.cfg
-              subPath: org.apache.karaf.features.cfg
-            {% endif %}
-            {% if opencast.userdirectory.ldap is defined %}
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
-              subPath: org.opencastproject.userdirectory.ldap-{{ opencast.userdirectory.ldap.id }}.cfg
-            {% endif %}
-            {% if extra_ldap is defined %}
-            - name: {{ extra_ldap.name }}
-              mountPath: {{ extra_ldap.configmap.mountpath }}
-              subPath: {{ extra_ldap.configmap.subpath }}
-            {% endif %}
             {% if newrelic is defined %}
             - name: newrelic
               mountPath: /opt/newrelic
@@ -171,8 +160,8 @@ spec:
       {% endif %}
       volumes:
         - name: opencast-config
-          configMap:
-            name: {{ meta.name }}-opencast-config
+          persistentVolumeClaim:
+            claimName: {{ meta.name }}-opencast-config
         - name: opencast-admin-config
           configMap:
             name: {{ meta.name }}-opencast-admin-config
@@ -185,22 +174,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ storage.claimname }}
         {% endif %}
-        {% if extra_ldap is defined %}
-        - name: {{ extra_ldap.name }}
-          configMap:
-            name: {{ extra_ldap.name }}
-        {% endif %}
-        - name: opencast-admin-data
-          emptyDir: {}
         {% if newrelic is defined %}
         - name: newrelic
           emptyDir: {}
         - name: newrelic-config
           configMap:
             name: {{ meta.name }}-newrelic-config
-        {% endif %}
-        {% if opencast.workflowdir_shared %}
-        - name: opencast-workflow-dir
-          persistentVolumeClaim:
-            claimName: {{ meta.name }}-opencast-workflow-dir
         {% endif %}

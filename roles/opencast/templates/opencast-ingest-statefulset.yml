@@ -96,9 +96,9 @@ spec:
               value: "{{ opencast.solr_series.url }}"
             - name: SOLR_WORKFLOW_URL
               value: "{{ opencast.solr_workflow.url }}"
-            - name: ELASTIC_SERVER_ADDRESS
+            - name: ELASTICSEARCH_SERVER_ADDRESS
               value: "{{ opencast.elasticsearch.address }}"
-            - name: ELASTIC_SERVER_PORT
+            - name: ELASTICSEARCH_SERVER_PORT
               value: "9200"
           volumeMounts:
             - name: opencast-persistent-storage
@@ -106,23 +106,9 @@ spec:
               {% if storage.subpath is defined %}
               subPath: {{ storage.subpath }}
               {% endif %}
-            - name: opencast-ingest-data
-              mountPath: /opencast/data
             - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
-              subPath: ugent-schedule-and-upload.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
-              subPath: ugent-partial-publish.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-import.xml
-              subPath: ugent-import.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
-              subPath: ugent-partial-ingest.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
-              subPath: org.ops4j.pax.logging.cfg
+              mountPath: /opencast-custom
+              subPath: generic
           resources:
             {% if opencast_ingest.resources.requests is defined %}
             requests:
@@ -144,8 +130,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ storage.claimname }}
         {% endif %}
-        - name: opencast-ingest-data
-          emptyDir: {}
         - name: opencast-config
-          configMap:
-            name: {{ meta.name }}-opencast-config
+          persistentVolumeClaim:
+            claimName: {{ meta.name }}-opencast-config

@@ -85,36 +85,6 @@ spec:
               {% if storage.subpath is defined %}
               subPath: {{ storage.subpath }}
               {% endif %}
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.organization-mh_default_org.cfg
-              subPath: org.opencastproject.organization-mh_default_org.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
-              subPath: org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-              subPath: org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-              subPath: org.opencastproject.lti.endpoint.EventsEndpoint.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/security/mh_default_org.xml
-              subPath: mh_default_org.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/org.opencastproject.userdirectory.ldap-ugent.cfg
-              subPath: org.opencastproject.userdirectory.ldap-ugent.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/ui-config/mh_default_org/paella/config.json
-              subPath: paella-config.json
-            - name: opencast-config
-              mountPath: /opencast/etc/org.apache.karaf.features.cfg
-              subPath: org.apache.karaf.features.cfg
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
-              subPath: ugent-schedule-and-upload.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
-              subPath: ugent-partial-publish.xml
           resources:
             requests:
               memory: "{{ opencast-allinone.resources.requests.memory }}"
@@ -123,9 +93,6 @@ spec:
               memory: "{{ opencast-allinone.resources.limits.memory }}"
               cpu: "{{ opencast-allinone.resources.limits.cpu }}"
       volumes:
-        - name: opencast-config
-          configMap:
-            name: '{{ meta.name }}-opencast-config'
         - name: opencast-persistent-storage
           persistentVolumeClaim:
             claimName: opencast-data

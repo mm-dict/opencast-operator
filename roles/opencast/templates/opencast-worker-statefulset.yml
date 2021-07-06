@@ -101,55 +101,24 @@ spec:
               value: "{{ opencast.solr_series.url }}"
             - name: SOLR_WORKFLOW_URL
               value: "{{ opencast.solr_workflow.url }}"
-            - name: ELASTIC_SERVER_ADDRESS
+            - name: ELASTICSEARCH_SERVER_ADDRESS
               value: "{{ opencast.elasticsearch.address }}"
-            - name: ELASTIC_SERVER_PORT
+            - name: ELASTICSEARCH_SERVER_PORT
               value: "9200"
+            - name: OPENCAST_CUSTOM_CONFIG
+              value: "/opencast-custom"
           volumeMounts:
             - name: opencast-persistent-storage
               mountPath: /data/opencast
               {% if storage.subpath is defined %}
               subPath: {{ storage.subpath }}
               {% endif %}
-            - name: opencast-worker-data
-              mountPath: /opencast/data
+            - name: opencast-config
+              mountPath: /opencast-custom
+              subPath: generic
             - name: opencast-worker-config
               mountPath: /opencast/bin/setenv
               subPath: setenv
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-schedule-and-upload.xml
-              subPath: ugent-schedule-and-upload.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-publish.xml
-              subPath: ugent-partial-publish.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-import.xml
-              subPath: ugent-import.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/prepare-videoeditor.xml
-              subPath: prepare-videoeditor.xml
-            - name: opencast-config
-              mountPath: /opencast/etc/workflows/ugent-partial-ingest.xml
-              subPath: ugent-partial-ingest.xml
-            {% if opencast.encodingdir_shared %}
-            - name: opencast-encoding-dir
-              mountPath: /opencast/etc/encoding/
-            {% else %}
-            - name: opencast-config
-              mountPath: /opencast/etc/encoding/ugent-adaptive-streaming-movies.properties
-              subPath: ugent-adaptive-streaming-movies.properties
-            - name: opencast-config
-              mountPath: /opencast/etc/encoding/adaptive-streaming-movies.properties
-              subPath: adaptive-streaming-movies.properties
-            {% endif %}
-            - name: opencast-config
-              mountPath: /opencast/etc/org.ops4j.pax.logging.cfg
-              subPath: org.ops4j.pax.logging.cfg
-            {% if extra_ldap is defined%}
-            - name: {{ extra_ldap.name }}
-              mountPath: {{ extra_ldap.configmap.mountpath }}
-              subPath: {{ extra_ldap.configmap.subpath }}
-            {% endif %}
           resources:
             {% if opencast_worker.resources.requests is defined %}
             requests:
@@ -161,11 +130,9 @@ spec:
               nvidia.com/gpu: 1
             {% endif %}
       volumes:
-        {% if opencast.encodingdir_shared %}
-        - name: opencast-encoding-dir
+        - name: opencast-config
           persistentVolumeClaim:
-            claimName: '{{ meta.name }}-opencast-encoding-dir'
-        {% endif %}
+            claimName: {{ meta.name }}-opencast-config
         {% if createpv is defined %}
         - name: opencast-persistent-storage
           persistentVolumeClaim:
@@ -175,16 +142,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ storage.claimname }}
         {% endif %}
-        - name: opencast-worker-data
-          emptyDir: {}
-        - name: opencast-config
-          configMap:
-            name: {{ meta.name }}-opencast-config
         - name: opencast-worker-config
           configMap:
             name: {{ meta.name }}-opencast-worker-config
-        {% if extra_ldap is defined %}
-        - name: {{ extra_ldap.name }}
-          configMap:
-            name: {{ extra_ldap.name }}
-        {% endif %}
