@@ -90,7 +90,7 @@ spec:
               value: "{{ opencast.admin.ui.url }}"
             - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
               value: "{{ opencast.engage.ui.url }}"
-            - name: ELASTICSEARCH_SERVER_ADDRESS
+            - name: ELASTICSEARCH_SERVER_HOST
               value: "{{ opencast.elasticsearch.address }}"
             - name: ELASTICSEARCH_SERVER_PORT
               value: "9200"
