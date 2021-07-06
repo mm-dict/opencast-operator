@@ -40,7 +40,7 @@ spec:
               value: "{{ opencast_admin.java.min_mem}}"
             - name: JAVA_MAX_MEM
               value: "{{ opencast_admin.java.max_mem}}"
-                        - name: ORG_OPENCASTPROJECT_DB_VENDOR
+            - name: ORG_OPENCASTPROJECT_DB_VENDOR
               value: "MySQL"
             - name: ORG_OPENCASTPROJECT_SERVER_URL
               value: ""
