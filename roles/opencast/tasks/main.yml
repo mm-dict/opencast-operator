@@ -61,12 +61,6 @@
             storage: '{{ pvsize }}'
   when: createpv is defined
 
-- name: Create the general opencast configmap
-  k8s:
-    state: present
-    apply: yes
-    definition: "{{ lookup('template', 'templates/opencast-configmap.yml') }}"
-
 - name: Create the general newrelic configmap
   k8s:
     state: present
