@@ -95,12 +95,6 @@ spec:
               value: "{{ opencast.admin.ui.url }}"
             - name: PROP_ORG_OPENCASTPROJECT_ENGAGE_UI_URL
               value: "{{ opencast.engage.ui.url }}"
-            - name: SOLR_SEARCH_URL
-              value: "{{ opencast.solr_search.url }}"
-            - name: SOLR_SERIES_URL
-              value: "{{ opencast.solr_series.url }}"
-            - name: SOLR_WORKFLOW_URL
-              value: "{{ opencast.solr_workflow.url }}"
             - name: ELASTICSEARCH_SERVER_ADDRESS
               value: "{{ opencast.elasticsearch.address }}"
             - name: ELASTICSEARCH_SERVER_PORT
