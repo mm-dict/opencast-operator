@@ -109,7 +109,7 @@ spec:
               {% endif %}
             - name: opencast-config
               mountPath: /opencast-custom
-              subPath: generic
+              subPath: worker
             - name: opencast-worker-config
               mountPath: /opencast/bin/setenv
               subPath: setenv

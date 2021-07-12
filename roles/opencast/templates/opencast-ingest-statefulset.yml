@@ -102,7 +102,7 @@ spec:
               {% endif %}
             - name: opencast-config
               mountPath: /opencast-custom
-              subPath: generic
+              subPath: ingest
           resources:
             {% if opencast_ingest.resources.requests is defined %}
             requests:
