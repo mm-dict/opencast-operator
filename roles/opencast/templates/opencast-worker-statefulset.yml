@@ -11,8 +11,6 @@ metadata:
 spec:
   replicas: {{ opencast_worker.replicas }}
   serviceName: '{{ meta.name }}-opencast-worker'
-  nodeSelector:
-    ugent.be/opencast-transcoder: ''
   selector:
     matchLabels:
       app: opencast
@@ -26,11 +24,13 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       serviceAccountName: opencast
+      nodeSelector:
+        ugent.be/opencast-transcoder: ''
       tolerations:
         - key: "type"
           operator: "Equal"
           value: "opencast-worker"
-          effect: "NoSchedule"
+          effect: "NoExecute"
       containers:
         - name: opencast-worker
           image: '{{ opencast_worker.image }}'
@@ -118,10 +118,6 @@ spec:
             requests:
               memory: "{{ opencast_worker.resources.requests.memory }}"
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
-            {% endif %}
-            {% if opencast_worker.enable_gpu %}
-            limits:
-              nvidia.com/gpu: 1
             {% endif %}
       volumes:
         - name: opencast-config
