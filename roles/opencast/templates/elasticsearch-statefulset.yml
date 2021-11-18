@@ -45,6 +45,8 @@ spec:
                   fieldPath: metadata.name
             - name: discovery.type
               value: "single-node"
+            - name: indices.breaker.total.use_real_memory
+              value: "false"
             - name: ES_JAVA_OPTS
               value: {{ opencast.elasticsearch.javaopts | default("-Xms512m -Xmx512m") }}
             - name: xpack.security.enabled
