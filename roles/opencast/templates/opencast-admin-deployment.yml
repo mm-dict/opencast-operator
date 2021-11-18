@@ -131,6 +131,7 @@ spec:
           readinessProbe:
             initialDelaySeconds: 60
             periodSeconds: 120
+            timeoutSeconds: 60
             httpGet:
               path: /info/me.json
               port: 8080
