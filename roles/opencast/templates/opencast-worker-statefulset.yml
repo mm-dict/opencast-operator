@@ -114,10 +114,13 @@ spec:
               mountPath: /opencast/bin/setenv
               subPath: setenv
           resources:
-            {% if opencast_worker.resources.requests is defined %}
             requests:
+            {% if opencast_worker.resources.requests is defined %}
               memory: "{{ opencast_worker.resources.requests.memory }}"
               cpu: "{{ opencast_worker.resources.requests.cpu }}"
+            {% endif %}
+            {% if opencast_worker.enable_gpu is defined %}
+              nvidia.com/gpu: 1
             {% endif %}
       volumes:
         - name: opencast-config
