@@ -56,17 +56,9 @@
     definition: "{{ lookup('template', 'templates/newrelic-configmap.yml') }}"
   when: newrelic is defined
 
-- name: Include the solr-series tasks
-  include: solr-series.yml
-  when: opencast.solr_series is defined
-
 - name: Include the solr-search tasks
   include: solr-search.yml
   when: opencast.solr_search is defined
-
-- name: Include the solr-workflow tasks
-  include: solr-workflow.yml
-  when: opencast.solr_workflow is defined
 
 - name: Include the elastic tasks
   include: elastic.yml
