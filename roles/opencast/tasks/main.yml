@@ -32,18 +32,6 @@
       data:
         database-password: '{{ opencast.database.pass | string | b64encode  }}'
 
-- name: Create the secret for activemq login
-  k8s:
-    state: present
-    definition:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        namespace: '{{ meta.namespace }}'
-        name: '{{ meta.name }}-opencast-activemq'
-      data:
-        activemq-password: '{{ opencast.activemq.pass | string | b64encode  }}'
-
 - name: Create the PV when defined in the spec
   k8s:
     state: present
@@ -67,9 +55,6 @@
     apply: yes
     definition: "{{ lookup('template', 'templates/newrelic-configmap.yml') }}"
   when: newrelic is defined
-
-- name: Include the activemq tasks
-  include: activemq.yml
 
 - name: Include the solr-series tasks
   include: solr-series.yml
