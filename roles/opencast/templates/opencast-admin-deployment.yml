@@ -139,6 +139,17 @@ spec:
               httpHeaders:
               - name: Host
                 value: localhost
+          livenessProbe:
+            initialDelaySeconds: 240
+            periodSeconds: 120
+            timeoutSeconds: 60
+            httpGet:
+              path: /info/me.json
+              port: 8080
+              scheme: HTTP
+              httpHeaders:
+              - name: Host
+                value: localhost
       initContainers:
       {% if newrelic is defined %}
       - name: install-newrelic
